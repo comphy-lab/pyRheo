@@ -21,6 +21,7 @@ You can install the `pyRheo` package directly from GitHub using pip:
 
 ```sh
 pip install git+https://github.com/mirandi1/pyRheo.git
+```sh
 
 ## Usage
 ### Importing the package
