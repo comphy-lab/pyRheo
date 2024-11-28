@@ -2,7 +2,7 @@ from scipy.optimize import minimize
 from skopt import gp_minimize
 from skopt.space import Real
 from .base_model import BaseModel
-from .oscillation_models import (
+from .rheo_models.oscillation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
