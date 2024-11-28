@@ -2,7 +2,7 @@ from scipy.optimize import minimize
 from skopt import gp_minimize
 from skopt.space import Real
 from .base_model import BaseModel
-from .rotation_models import (
+from .rheo_models.rotation_models import (
     HerschelBulkley, Bingham, PowerLaw, CarreauYasuda, Cross, Casson
 )
 import numpy as np
