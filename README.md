@@ -27,14 +27,14 @@ pip install git+https://github.com/mirandi1/pyRheo.git
 ### Importing the package
 Once the package has been installed, you can simply import its modules:
 
-```sh
+```python
 from pyRheo import CreepModel, RelaxationModel, OscillationModel, RotationModel
 ```
 
 ### Modeling data with pyRheo
 To begin modeling dat, first define a model object:
 
-```sh
+```python
 model = RelaxationModel(model="FractionalZenerSolidS", initial_guesses="random", 
                         num_initial_guesses=10, 
                         minimization_algorithm="Powell", 
