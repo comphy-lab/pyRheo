@@ -21,3 +21,21 @@ You can install the `pyRheo` package directly from GitHub using pip:
 
 ```sh
 pip install git+https://github.com/mirandi1/pyRheo.git
+
+## Usage
+### Importing the package
+Once the package has been installed, you can simply import its modules:
+
+from pyRheo import CreepModel, RelaxationModel, OscillationModel, RotationModel
+
+
+# Example data
+time = np.linspace(0, 100, num=20)
+strain = np.random.random(20)
+
+# Instantiate and fit the model
+creep_model = CreepModel()
+creep_model.fit(time, strain)
+
+# Print parameters
+creep_model.print_parameters()
