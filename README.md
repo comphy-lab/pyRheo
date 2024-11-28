@@ -6,11 +6,7 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Creep Model](#creep-model)
-  - [Stress Relaxation Model](#stress-relaxation-model)
-  - [Oscillation Model](#oscillation-model)
-  - [Rotation Model](#rotation-model)
-- [Demo Scripts](#demo-scripts)
+- [Demos](#demos)
 - [GUI](#gui)
 - [Contributing](#contributing)
 - [License](#license)
@@ -71,3 +67,17 @@ time_predict = np.logspace(np.min(np.log10(time)), np.max(np.log10(time)), 100)
 G_relax_predict = model.predict(time_predict)
 ```
 
+## Demos
+Examples of the software's functionality can be found in the demos/ directory, which showcases how to use all the modules in pyRheo.
+
+## GUI
+For a graphical user interface  (GUI) of pyRheo, follow the instructions in the gui/ directory
+
+## Contributing
+Inquiries and suggestions can be directed to isaac.mirandavaldez[at]aalto.fi or by raising an issue here.
+
+## License
+[GNU General Public Licence](https://choosealicense.com/licenses/gpl-3.0/)
+
+## References
+The data used in the demos has been collected under Creative Commons from
