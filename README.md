@@ -2,14 +2,20 @@
 
 **pyRheo** is a Python package for rheological modeling, providing tools for creep, stress relaxation, oscillation, and rotation models. This package is designed to help researchers and engineers analyze and model the behavior of viscoelastic materials.
 
-## Table of Contents
+Publication of this work is coming soon. Please cite this software using the metadata in the citation file for now.
 
+## Table of Contents
+- [Documentation](#documentation)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Demos](#demos)
 - [GUI](#gui)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Documentation
+Refer to the documentation to learn more about the package and how to utilize its API.
+
 
 ## Installation
 
