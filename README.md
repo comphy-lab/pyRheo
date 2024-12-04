@@ -86,23 +86,25 @@ Inquiries and suggestions can be directed to isaac.mirandavaldez[at]aalto.fi or 
 [GNU General Public Licence](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## References
-The data used in the demos has been collected under Creative Commons from
+The data used in the demos has been collected from:
+
+K. Landauer, O. L. Kafka, N. H. Moser, I. Foster, B. Blaiszik and A. M. Forster, Scientific Data, 2023, 10, 356
 
 F. A. Lavergne, P. Sollich and V. Trappe, The Journal of Chemical Physics, 2022, 156, 154901.
 
-E. S. Epstein, L. Martinetti, R. H. Kollarigowda, O. Carey-De La Torre, J. S. Moore, R. H.
-Ewoldt and P. V. Braun, Journal of the American Chemical Society., 2019-02-27, 141, 3597–
+E. S. Epstein, L. Martinetti, R. H. Kollarigowda, O. Carey-De La Torre, J. S. Moore, R. H. Ewoldt and P. V. Braun, Journal of the American Chemical Society., 2019-02-27, 141, 3597–
 3604.
 
-I. Y. Miranda-Valdez, M. Sourroubille, T. Mäkinen, J. G. Puente-Córdova, A. Puisto,
-J. Koivisto and M. J. Alava, Cellulose, 2024, 31, 1545–1558.
+I. Y. Miranda-Valdez, M. Sourroubille, T. Mäkinen, J. G. Puente-Córdova, A. Puisto, J. Koivisto and M. J. Alava, Cellulose, 2024, 31, 1545–1558.
 
 R. G. Ricarte and S. Shanbhag, Polymer Chemistry, 2024, 15, 815–846.
 
 K. R. Lennon, G. H. McKinley and J. W. Swan, Data-Centric Engineering, 2023, 4, e13.
 
-R. I. Dekker, M. Dinkgreve, H. D. Cagny, D. J. Koeze, B. P. Tighe and D. Bonn, Journal of
-Non-Newtonian Fluid Mechanics, 2018, 261, 33–37.
+R. I. Dekker, M. Dinkgreve, H. D. Cagny, D. J. Koeze, B. P. Tighe and D. Bonn, Journal of Non-Newtonian Fluid Mechanics, 2018, 261, 33–37.
+
+
+Mittag-Leffler algorithms were implemented based on:
 
 C. Zeng and Y. Q. Chen, Fractional Calculus and Applied Analysis, 2015, 18, 1492–1506.
 
