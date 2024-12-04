@@ -77,7 +77,7 @@ G_relax_predict = model.predict(time_predict)
 Examples of the software's functionality can be found in the demos/ directory, which showcases how to use all the modules in pyRheo.
 
 ## GUI
-For a graphical user interface  (GUI) of pyRheo, follow the instructions in the gui/ directory
+For a graphical user interface  (GUI) of pyRheo, follow the instructions in the gui/ directory.
 
 ## Contributing
 Inquiries and suggestions can be directed to isaac.mirandavaldez[at]aalto.fi or by raising an issue here.
