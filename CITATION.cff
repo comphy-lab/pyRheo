@@ -3,8 +3,7 @@
 
 cff-version: 1.0.0
 title: >-
-  Automatic Identification of Similarity Relations
-  from Data
+  pyRheo: An open-source Python package for rheology of materials
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
