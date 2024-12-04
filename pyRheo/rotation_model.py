@@ -8,6 +8,7 @@ from .rheo_models.rotation_models import (
 import numpy as np
 import math
 import joblib
+import os
 from scipy.ndimage import gaussian_filter1d
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
@@ -53,8 +54,12 @@ class RotationModel(BaseModel):
 
         if model == "auto":
             # Load the pretrained models
-            self.pca = joblib.load('pca_models/pca_model_rotation.joblib')
-            self.classifier = joblib.load('mlp_models/mlp_model_rotation.joblib')
+            current_dir = os.path.dirname(__file__)
+            pca_path = os.path.join(current_dir, 'pca_models', 'pca_model_rotation.joblib')
+            mlp_path = os.path.join(current_dir, 'mlp_models', 'mlp_model_rotation.joblib')
+
+            self.pca = joblib.load(pca_path)
+            self.classifier = joblib.load(mlp_path)
 
     def _creategamma_dotNumpyLogarithmic(self, start, stop, num):
         return np.logspace(np.log10(start), np.log10(stop), num)
@@ -297,8 +302,8 @@ class RotationModel(BaseModel):
             raise ValueError("Model must be fitted before plotting.")
     
         import matplotlib.pyplot as plt
-        import scienceplots
-        plt.style.use(['science', 'nature', "bright"])
+        #import scienceplots
+        #plt.style.use(['science', 'nature', "bright"])
 
         # Predict eta using the fitted model
         eta_pred = self.predict(gamma_dot)

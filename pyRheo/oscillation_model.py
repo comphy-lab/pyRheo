@@ -6,9 +6,10 @@ from .rheo_models.oscillation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD
+    FractionalZenerLiquidD, FractionalZenerS
 )
 import numpy as np
+import os
 import math
 import joblib
 from scipy.ndimage import gaussian_filter1d
@@ -29,6 +30,7 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
+    "FractionalZenerS" : FractionalZenerS
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -45,6 +47,7 @@ MODEL_PARAMS = {
     "FractionalZenerSolidS": ["G_p", "G_s", "V", "alpha"],
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_s", "eta_p", "G", "beta"],
+    "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
 }
 
 # Dictionary mapping classifier indices to model names
@@ -68,13 +71,17 @@ class OscillationModel(BaseModel):
         self.minimization_algorithm = minimization_algorithm
         self.custom_bounds = None if bounds == "auto" else bounds
         self.num_initial_guesses = num_initial_guesses
-
+        
         if model == "auto":
             # Load the pretrained models
-            #self.scaler = joblib.load('scaler_relaxation.joblib')
-            self.pca_prime = joblib.load('pca_models/pca_model_prime.joblib')
-            self.pca_double_prime = joblib.load('pca_models/pca_model_double_prime.joblib')
-            self.classifier = joblib.load('mlp_models/mlp_model_oscillation.joblib')
+            current_dir = os.path.dirname(__file__)
+            pca_prime_path = os.path.join(current_dir, 'pca_models', 'pca_model_prime.joblib')
+            pca_double_prime_path = os.path.join(current_dir, 'pca_models', 'pca_model_prime.joblib')
+            mlp_path = os.path.join(current_dir, 'mlp_models', 'mlp_model_oscillation.joblib')
+
+            self.pca_prime = joblib.load(pca_prime_path)
+            self.pca_double_prime = joblib.load(pca_double_prime_path)
+            self.classifier = joblib.load(mlp_path)
 
     def _createomegaNumpyLogarithmic(self, start, stop, num):
         return np.logspace(np.log10(start), np.log10(stop), num)
@@ -341,8 +348,8 @@ class OscillationModel(BaseModel):
             raise ValueError("Model must be fitted before plotting.")
     
         import matplotlib.pyplot as plt
-        import scienceplots
-        plt.style.use(['science', 'nature', "bright"])
+        #import scienceplots
+        #plt.style.use(['science', 'nature', "bright"])
 
         # Predict G_prime, G_double_prime using the fitted model
         G_prime_pred, G_double_prime_pred = self.predict(omega)
@@ -355,11 +362,11 @@ class OscillationModel(BaseModel):
         plt.plot(omega, G_double_prime_pred, '--', color='k', lw=2)
         plt.xscale("log")
         plt.yscale("log")
-        plt.xticks(fontsize=16)
-        plt.yticks(fontsize=16)
-        plt.xlabel(r'$\omega$ [rad s$^{-1}$]', fontsize=16)
-        plt.ylabel(r'$G^{\prime}(\omega), G^{\prime \prime}(\omega)$ [Pa]', fontsize=16)
-        plt.legend(fontsize=15)
+        plt.xticks(fontsize=14)
+        plt.yticks(fontsize=14)
+        plt.xlabel(r'$\omega$ [rad s$^{-1}$]', fontsize=14)
+        plt.ylabel(r'$G^{\prime}(\omega), G^{\prime \prime}(\omega)$ [Pa]', fontsize=14)
+        plt.legend(fontsize=13.5)
         plt.grid(False)
         plt.tight_layout()
 

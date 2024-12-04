@@ -6,11 +6,12 @@ from .rheo_models.relaxation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD
+    FractionalZenerLiquidD, FractionalZenerS
 )
 import numpy as np
 import math
 import joblib
+import os
 from scipy.ndimage import gaussian_filter1d
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
@@ -29,6 +30,7 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
+    "FractionalZenerS" : FractionalZenerS
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -45,6 +47,7 @@ MODEL_PARAMS = {
     "FractionalZenerSolidS": ["G_p", "G_s", "V", "alpha"],
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_s", "eta_p", "G", "beta"],
+    "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
 }
 
 # Dictionary mapping classifier indices to model names
@@ -73,9 +76,13 @@ class RelaxationModel(BaseModel):
 
         # Load pretrained models if the model is set to "auto"
         if model == "auto":
-            #self.scaler = joblib.load('scaler_relaxation.joblib')
-            self.pca = joblib.load('pca_models/pca_model_relaxation.joblib')
-            self.classifier = joblib.load('mlp_models/mlp_model_relaxation.joblib')
+            # Load the pretrained models
+            current_dir = os.path.dirname(__file__)
+            pca_path = os.path.join(current_dir, 'pca_models', 'pca_model_relaxation.joblib')
+            mlp_path = os.path.join(current_dir, 'mlp_models', 'mlp_model_relaxation.joblib')
+
+            self.pca = joblib.load(pca_path)
+            self.classifier = joblib.load(mlp_path)
 
     def _createTimeNumpyLogarithmic(self, start, stop, num):
         # Generate logarithmically spaced time points
@@ -359,8 +366,8 @@ class RelaxationModel(BaseModel):
             raise ValueError("Model must be fitted before plotting.")
     
         import matplotlib.pyplot as plt
-        import scienceplots
-        plt.style.use(['science', 'nature', "bright"])
+        #import scienceplots
+        #plt.style.use(['science', 'nature', "bright"])
 
         # Predict G_relax using the fitted model
         G_relax_pred = self.predict(time)

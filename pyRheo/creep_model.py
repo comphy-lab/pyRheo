@@ -6,15 +6,17 @@ from .rheo_models.creep_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD
+    FractionalZenerLiquidD, FractionalZenerS
 )
 import numpy as np
 import math
 import joblib
+import os
 from scipy.ndimage import gaussian_filter1d
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
 
+# Dictionary mapping model names to their respective classes
 MODEL_FUNCS = {
     "Maxwell": MaxwellModel,
     "SpringPot": SpringPot,
@@ -28,8 +30,10 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
+    "FractionalZenerS" : FractionalZenerS
 }
 
+# Dictionary mapping model names to their respective parameters
 MODEL_PARAMS = {
     "Maxwell": ["G_s", "eta_s"],
     "SpringPot": ["V", "alpha"],
@@ -43,15 +47,16 @@ MODEL_PARAMS = {
     "FractionalZenerSolidS": ["G_p", "G_s", "V", "alpha"],
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_s", "eta_p", "G", "beta"],
+    "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
 }
 
 CLASSIFIER_MODELS = {
     0: "Maxwell",
     1: "SpringPot",
-    2: "FractionalMaxwellLiquid",
-    3: "FractionalMaxwellGel",
-    4: "FractionalMaxwell",
-    5: "FractionalKelvinVoigt"
+    #2: "FractionalMaxwellLiquid",
+    #3: "FractionalMaxwellGel",
+    2: "FractionalMaxwell",
+    3: "FractionalKelvinVoigt"
 }
 
 class CreepModel(BaseModel):
@@ -67,11 +72,15 @@ class CreepModel(BaseModel):
         self.num_initial_guesses = num_initial_guesses
         self.mittag_leffler_type = mittag_leffler_type
 
+        # Load pretrained models if the model is set to "auto"
         if model == "auto":
             # Load the pretrained models
-            #self.scaler = joblib.load('scaler_creep.joblib')
-            self.pca = joblib.load('pca_models/pca_model_creep_5.joblib')
-            self.classifier = joblib.load('mlp_models/mlp_model_creep_5.joblib')
+            current_dir = os.path.dirname(__file__)
+            pca_path = os.path.join(current_dir, 'pca_models', 'pca_model_creep.joblib')
+            mlp_path = os.path.join(current_dir, 'mlp_models', 'mlp_model_creep.joblib')
+
+            self.pca = joblib.load(pca_path)
+            self.classifier = joblib.load(mlp_path)
 
     def _createTimeNumpyLogarithmic(self, start, stop, num):
         return np.logspace(np.log10(start), np.log10(stop), num)
@@ -351,8 +360,8 @@ class CreepModel(BaseModel):
             raise ValueError("Model must be fitted before plotting.")
     
         import matplotlib.pyplot as plt
-        import scienceplots
-        plt.style.use(['science', 'nature', "bright"])
+        #import scienceplots
+        #plt.style.use(['science', 'nature', "bright"])
 
         # Predict J_creep using the fitted model
         J_creep_pred = self.predict(time)
