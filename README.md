@@ -33,7 +33,7 @@ Once the package has been installed, you can simply import its modules:
 from pyRheo import CreepModel, RelaxationModel, OscillationModel, RotationModel
 ```
 
-### Modeling data with pyRheo
+### Modeling stress relaxation data with pyRheo
 To begin modeling data, first define a model object:
 
 ```python
