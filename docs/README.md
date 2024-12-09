@@ -69,7 +69,7 @@ pyRheo is a Python package for automatically finding and fitting a viscoelastic 
 This package is based on the methodology describe in **pyRheo: An open-source Python package for rheology
 of materials**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
 
-```sh
+```bash
 @article{miranda-valdez_niinisto_makinen_koivisto_alava_2024,
     doi = {},
     url = {},
