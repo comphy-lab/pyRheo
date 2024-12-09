@@ -27,37 +27,44 @@ Check out the Quick Start section for more information on getting started, inclu
   - [Plotting results](#plotting-resutls)
 - [Tutorials](#tutorials)
   - [Tutorial: Fitting creep data](#tutorial-fitting-creep-data)
-    - [Import Packages](#import-packages)
-    - [Creating Synthetic Data](#creating-synthetic-data)
-    - [Creating the Master Curve](#creating-the-master-curve)
-    - [Plotting the Master Curve](#plotting-the-master-curve)
-    - [Analyzing the Shift Factors](#analyzing-the-shift-factors)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
   - [Tutorial: Fitting stress relaxation data](#tutorial-fitting-stress-relaxation-data)
-    - [Import Packages](#import-packages)
-    - [Creating Synthetic Data](#creating-synthetic-data)
-    - [Creating the Master Curve](#creating-the-master-curve)
-    - [Plotting the Master Curve](#plotting-the-master-curve)
-    - [Analyzing the Shift Factors](#analyzing-the-shift-factors)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
   - [Tutorial: Fitting oscillation data](#tutorial-fitting-oscillation-data)
-    - [Import Packages](#import-packages)
-    - [Creating Synthetic Data](#creating-synthetic-data)
-    - [Creating the Master Curve](#creating-the-master-curve)
-    - [Plotting the Master Curve](#plotting-the-master-curve)
-    - [Analyzing the Shift Factors](#analyzing-the-shift-factors)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
   - [Tutorial: Fitting rotation data](#tutorial-fitting-rotation-data)
-    - [Import Packages](#import-packages)
-    - [Creating Synthetic Data](#creating-synthetic-data)
-    - [Creating the Master Curve](#creating-the-master-curve)
-    - [Plotting the Master Curve](#plotting-the-master-curve)
-    - [Analyzing the Shift Factors](#analyzing-the-shift-factors)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
   - [Tutorial: Setting manual intial guesses and boundaries](#tutorial-setting-initial-guesses-and-boundaries)
-    - [Import Packages](#import-packages)
-    - [Creating Synthetic Data](#creating-synthetic-data)
-    - [Creating the Master Curve](#creating-the-master-curve)
-    - [Plotting the Master Curve](#plotting-the-master-curve)
-    - [Analyzing the Shift Factors](#analyzing-the-shift-factors)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
+  - [Tutorial: Setting manual intial guesses and boundaries](#tutorial-setting-initial-guesses-and-boundaries)
+    - [Import Packages](#importing-packages)
+    - [Loading data](#loading-data)
+    - [Fitting model](#fitting-model)
+    - [Plotting model](#plotting-model)
+    - [Analyzing model parameters](#analyzing-model-parameters)
 - [Demos](#demos)
-
+  - Fitting a master curver
+  - Fitting a model with Mittag-Leffler function
 - [API](#api)
   - [pyRheo](#pyRheo)
     - [pyRheo](#pyRheo-1)
@@ -66,7 +73,7 @@ Check out the Quick Start section for more information on getting started, inclu
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, oscillation, and rotation tests.
 
 ## Citing
-This package is based on the methodology describe in **pyRheo: An open-source Python package for rheology
+This package is based on the methodology described in **pyRheo: An open-source Python package for rheology
 of materials**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
 
 ```
@@ -86,6 +93,52 @@ No new at the moment.
 ## Installation
 At the moment, the way to install **pyRheo** is via cloning the GitHub repository. Later on, it will be easier with Python Package Index using pip.
 
+## Contributing
+Issues, suggestions, feedback, or any comment can be sent directly to isaac.mirandavaldez[at].aalto.fi or by rising an issues on pyRheo's GitHub.
+
+# Machine Learning classifier
+We use MLP
+
+## Data standardization
+Log10 and standard_scaler
+
+## MLP
+Multi-Layer Perceptron
+
+# Quick start
+
+## Installation
+Via pip
+
+## Preparing data
+Read csv file using pandas eg
+
+## Fitting data
+model.fit()
+
+## Analyzing results
+model.print_parameters()
+model.get_parameters() they are stored as a dictionary
+
+## Plotting results
+model.plot
+or model.predict and plot with matplotlib
+use the modelevaluator to plot an analogous response. Eg, from the parameters found in relaxation, plot creep, etc.
+
+# Tutorials
+5 tutorials
+
+## Fitting creep data
+
+### Import packages
+
+### Loading data
+
+### Fitting model
+
+### Plotting model
+
+### Analyzing model parameters
 
 
 
