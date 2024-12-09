@@ -37,7 +37,7 @@ MODEL_FUNCS = {
 MODEL_PARAMS = {
     "Maxwell": ["G_s", "eta_s"],
     "SpringPot": ["V", "alpha"],
-    "FractionalMaxwellGel": ["V", "G_s", "alpha"],
+    "FractionalMaxwellGel": ["G_s", "V", "alpha"],
     "FractionalMaxwellLiquid": ["G", "eta_s", "beta"],
     "FractionalMaxwell": ["G", "V", "alpha", "beta"],
     "FractionalKelvinVoigtS": ["G_p", "V", "alpha"],
@@ -46,7 +46,7 @@ MODEL_PARAMS = {
     "Zener": ["G_p", "G_s", "eta_s"],
     "FractionalZenerSolidS": ["G_p", "G_s", "V", "alpha"],
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
-    "FractionalZenerLiquidD": ["eta_s", "eta_p", "G", "beta"],
+    "FractionalZenerLiquidD": ["eta_p", "G", "eta_s", "beta"],
     "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
 }
 

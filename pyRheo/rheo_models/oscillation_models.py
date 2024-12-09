@@ -126,7 +126,7 @@ def FractionalMaxwellGel(G_s, V, alpha, omega, errorInserted=0):
     return np.concatenate([G_prime, G_double_prime])
 
 # Fractional Maxwell Liquid Model
-def FractionalMaxwellLiquid(eta_s, G, beta, omega, errorInserted=0):
+def FractionalMaxwellLiquid(G, eta_s, beta, omega, errorInserted=0):
     """
     Compute the Fractional Maxwell Liquid model response
 
@@ -503,7 +503,7 @@ def FractionalZenerLiquidS(G_p, G, eta_s, beta, omega, errorInserted=0):
         
 
 # Fractional Zener model (springpot-dashpot --- dashpot)     
-def FractionalZenerLiquidD(eta_p, eta_s, G, beta, omega, errorInserted=0):
+def FractionalZenerLiquidD(eta_p, G, eta_s, beta, omega, errorInserted=0):
     """
     Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener Liquid-D model.
     

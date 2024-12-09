@@ -81,7 +81,7 @@ def SpringPot(V, alpha, t, errorInserted=0):
     return result
 
 # Fractional Maxwell Gel model (springpot-spring)
-def FractionalMaxwellGel(V, G_s, alpha, t, errorInserted=0):
+def FractionalMaxwellGel(G_s, V, alpha, t, errorInserted=0):
     """
     Compute the Fractional Maxwell Gel model response
 
@@ -492,7 +492,7 @@ def FractionalZenerLiquidS(G_p, G, eta_s, beta, t, errorInserted=0):
     return result 
  
 # Fractional Zener model (springpot-dashpot --- dashpot)     
-def FractionalZenerLiquidD(eta_s, eta_p, G, beta, t, errorInserted=0):
+def FractionalZenerLiquidD(eta_p, G, eta_s, beta, t, errorInserted=0):
     """
     Compute the Fractional Zener Liquid-D model using inverse Laplace transform.
     
