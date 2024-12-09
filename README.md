@@ -19,7 +19,7 @@ Refer to the documentation to learn more about the package and how to utilize it
 
 ## Installation
 
-You can install the `pyRheo` package directly from GitHub using pip:
+**In the future**, you will be able to install the `pyRheo` package directly from GitHub using pip:
 
 ```sh
 pip install git+https://github.com/mirandi1/pyRheo.git
