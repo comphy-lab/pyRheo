@@ -14,8 +14,8 @@ Check out the Quick Start section for more information on getting started, inclu
   - [pyRheo](#pyRheo)
   - [Citing](#citing)
   - [News](#news)
-- [Installation](#installation)
-- [Contributing](#contributing)
+  - [Installation](#installation)
+  - [Contributing](#contributing)
 - [Machine Learning classifier](#machine-learning-classifier)
   - [Data standardization](#data-standardization)
   - [Multi-Layer Perceptron](#multi-layer-perceptron)
@@ -65,7 +65,7 @@ Check out the Quick Start section for more information on getting started, inclu
 ## pyRheo
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, oscillation, and rotation tests.
 
-### Citing
+## Citing
 This package is based on the methodology describe in **pyRheo: An open-source Python package for rheology
 of materials**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
 
@@ -79,4 +79,15 @@ of materials**. If you use the software and feel that it was useful for your res
     year = {2024},
 }
 ```
+
+## News
+No new at the moment.
+
+## Installation
+At the moment, the way to install **pyRheo** is via cloning the GitHub repository. Later on, it will be easier with Python Package Index using pip.
+
+
+
+
+
 
