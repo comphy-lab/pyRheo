@@ -74,7 +74,7 @@ of materials**. If you use the software and feel that it was useful for your res
     doi = {},
     url = {},
     author = {Miranda-Valdez, Isaac Y. and Niinistö, Aaro and Mäkinen, Tero and Koivisto, Juha and Alava, Mikko J.},
-    title = {pyRheo: An open-source Python package \for rheology of materials},
+    title = {pyRheo: An open-source Python package for rheology of materials},
     publisher = {arXiv},
     year = {2024},
 }
