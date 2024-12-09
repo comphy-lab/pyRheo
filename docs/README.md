@@ -145,6 +145,30 @@ use the modelevaluator to plot an analogous response. Eg, from the parameters fo
 
 # API
 
-## 
+## CreepModel
+
+## Class: `CreepModel`
+
+### Description
+`CreepModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+
+---
+
+### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="manual", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+
+| Parameter              | Type   | Description                    |
+|------------------------|--------|--------------------------------|
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`.                             |
+| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"manual"`. Other options are `"random"` and `"bayesian"`. |
+| `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
+| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`.                          |
+| `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+| `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`.              |
+
+#### Example:
+```python
+creep_model = CreepModel(model="Maxwell")
+
 
 
