@@ -60,14 +60,11 @@ Check out the Quick Start section for more information on getting started, inclu
     - [Import Packages](#importing-packages)
     - [Loading data](#loading-data)
     - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
 - [Demos](#demos)
-  - Fitting a master curver
+  - Fitting a master curve
   - Fitting a model with Mittag-Leffler function
 - [API](#api)
-  - [pyRheo](#pyRheo)
-    - [pyRheo](#pyRheo-1)
+  - [Creep](#creep)
 
 ## pyRheo
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, oscillation, and rotation tests.
@@ -140,7 +137,14 @@ use the modelevaluator to plot an analogous response. Eg, from the parameters fo
 
 ### Analyzing model parameters
 
+# Demos
 
+## Fitting a master curve
 
+## Fitting a model with Mittag-Leffler function
+
+# API
+
+## 
 
 
