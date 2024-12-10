@@ -99,13 +99,13 @@ We use a **Multi-Layer Perceptron (MLP)** to train a machine learning model that
 ## Data standardization
 The **MLP** models are trained with synthetic data generated from randomly assigning values to the models parameters. The latter results in material functions (eg., creep compliance *J(t)*) computed over a time, angular frequency, or shear rate range. Thus, a training dataset is built by generating 1 million materials functions. Over the 1 million computations, we randomly varied the models and their parameters values. In the end, we record the magnitude of the material function from every computation and its correspondig label; for example, to train the MLP classfier for creep, we record in every computation the creep compliance and the name of the model that was used to generate the creep compliance data.
 
-Knowing that the data the user will feed to the MLP will be different in magnitude and dataset size, standarizing the training data is crucial. For the first, the result from every computation is standarized by taking its log-transformation and then by removing the mean and sclaing to unit variance.
+Knowing that the data the user will feed to the MLP will be different in magnitude and dataset size, standarizing the training data is crucial. For the first, the result from every computation is standarized by taking its log-transformation and then by removing the mean and sclaing to unit variance. For example, 
 
 $$
 z = \log{J(t)}
+\hat{z} = \frac{z - \mu}{s}
 $$
-
-
+where $z$ is the result of the log-transformation, and $\hat{z}$ is the standardized log-transformed data.
 
 To deal with different dataset sizes, we use principal component analysis (PCA) for dimensionality reduction, which finds that the minimum requiried to describe a dataset is 10 components. Accordingly, the minimum size of a dataset that the user can input to the MLP is a material function with 10 records.
 
