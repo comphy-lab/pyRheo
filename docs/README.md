@@ -103,8 +103,12 @@ Knowing that the data the user will feed to the MLP will be different in magnitu
 
 $$
 z = \log{J(t)}
+$$
+
+$$
 \hat{z} = \frac{z - \mu}{s}
 $$
+
 where $z$ is the result of the log-transformation, and $\hat{z}$ is the standardized log-transformed data.
 
 To deal with different dataset sizes, we use principal component analysis (PCA) for dimensionality reduction, which finds that the minimum requiried to describe a dataset is 10 components. Accordingly, the minimum size of a dataset that the user can input to the MLP is a material function with 10 records.
