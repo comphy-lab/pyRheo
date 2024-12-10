@@ -101,7 +101,9 @@ The **MLP** models are trained with synthetic data generated from randomly assig
 
 Knowing that the data the user will feed to the MLP will be different in magnitude and dataset size, standarizing the training data is crucial. For the first, the result from every computation is standarized by taking its log-transformation and then by removing the mean and sclaing to unit variance.
 
-$ z = \log{J(t)}$
+$$
+z = \log{J(t)}
+$$
 
 
 
