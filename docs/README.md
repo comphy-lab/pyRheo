@@ -23,8 +23,8 @@ Check out the Quick Start section for more information on getting started, inclu
   - [Installation](#installation-1)
   - [Preparing data](#preparing-data)
   - [Fitting data](#fitting-data)
-  - [Analyzing results](#analyzing-results)
   - [Plotting results](#plotting-resutls)
+  - [Analyzing results](#analyzing-results)
 - [Tutorials](#tutorials)
   - [Tutorial: Fitting creep data](#tutorial-fitting-creep-data)
     - [Import Packages](#importing-packages)
@@ -85,7 +85,7 @@ of materials**. If you use the software and feel that it was useful for your res
 ```
 
 ## News
-No new at the moment.
+No news at the moment.
 
 ## Installation
 At the moment, the way to install **pyRheo** is via cloning the GitHub repository. Later on, it will be easier with Python Package Index using pip.
@@ -94,7 +94,7 @@ At the moment, the way to install **pyRheo** is via cloning the GitHub repositor
 Issues, suggestions, feedback, or any comment can be sent directly to isaac.mirandavaldez[at].aalto.fi or by rising an issues on pyRheo's GitHub.
 
 # Machine Learning classifier
-We use MLP
+We use a **Multi-Layer Perceptron (MLP)** to train a machine learning model that classifies a creep, stress relaxation, oscillation, or rotation dataset according to the given model labels. The training process involves preprocessing the dataset, while also splitting it into training, validation, and test sets to evaluate the model's performance objectively. Here, we summarize the preprocessing logic and the performance of the MLP models.
 
 ## Data standardization
 Log10 and standard_scaler
