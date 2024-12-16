@@ -215,6 +215,31 @@ plt.tight_layout()
 plt.show()
 ```
 
+Alternatively, it is possible to use the dictionary obtained with `model_creep.get_parameters()` to compute the results and the theoretical responses of the other kind of experiments, relaxation and oscillation:
+
+```python
+# Import tools
+from pyRheo.creep_evaluator import CreepEvaluator
+from pyRheo.relaxation_evaluator import RelaxationEvaluator
+from pyRheo.oscillation_evaluator import OscillationEvaluator
+
+# Define objects
+evaluator_creep = CreepEvaluator(model="FractionalMaxwellLiquid")
+evaluator_relax = RelaxationEvaluator(model="FractionalMaxwellLiquid")
+evaluator_oscillation = OscillationEvaluator(model="FractionalMaxwellLiquid")
+
+# Store the parameter from model_creep fitted
+params_dictionary = model.get_parameters()
+
+# Extract the desired keys and convert their values to a list
+selected_keys = ['G', 'eta_s', 'beta']
+params = [params_dictionary[key] for key in selected_keys]
+
+# Compute theoretical responses
+J_creep_predict = evaluator_creep.compute_model(params, time_predict, mittag_leffler_type="Pade63")
+G_relax_predict = evaluator_relax.compute_model(params, time_predict, mittag_leffler_type="Pade63")
+G_prime_predict, G_double_prime_predict = evaluator_oscillation.compute_model(params, time_predict) # angular frequency instead of time
+```
 
 
 # Tutorials
