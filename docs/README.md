@@ -114,10 +114,10 @@ from pyRheo.rotation_model import RotationModel   # For rheological modeling
 In this case, let's import experimental data from a creep experiment:
 
 ```python
-# The file contains time (time) and relaxation (J_creep) data.
-data = pd.read_csv('./data/polystyrene/creep_ps190_data.csv', delimiter='\t', decimal=".")
+# The file contains time (time) and compliance (J_creep) data.
+data = pd.read_csv('creep_ps190_data.csv', delimiter='\t', decimal=".")
 
-# Extract time and relaxation as numpy arrays
+# Extract time and compliance as numpy arrays
 time = data['Time'].values
 J_creep = data['Creep Compliance'].values
 ```
@@ -126,7 +126,7 @@ J_creep = data['Creep Compliance'].values
 For fitting the data, let's first create a model object
 
 ```python
-model_creep = CreepModel(model="auto",                    # Automatically selects a model using machine learning
+model_creep = CreepModel(model="FractionalMaxwelliquid",       # Choose a model
                         initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
                         num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
                         minimization_algorithm="Powell",  # Optimization algorithm for global optimization
@@ -141,8 +141,26 @@ model_creep.fit(time, J_creep)
 ```
 
 ## Analyzing results
-model.print_parameters()
-model.get_parameters() they are stored as a dictionary
+If the fitting is succesfull, print the parameter results with:
+
+```python
+# Print the fitted parameters and error metrics
+model_creep.print_parameters()  # Display model parameters
+model_creep.print_error()       # Display error of the fit
+```
+
+It is also possible to store the parameters as a dictionary for further operations:
+
+```python
+model_creep.get_parameters()
+```
+
+```sh
+{'G': 25856.763541580505,
+ 'eta_s': 68281.08243229917,
+ 'beta': 0.4223496565227164,
+ 'RSS': 0.04791247579367503}
+```
 
 ## Plotting results
 model.plot
