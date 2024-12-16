@@ -145,7 +145,7 @@ For advanced plotting, it is possible to call the model object to predict over a
 ```python
 # Generate predictions using the fitted model for a smooth curve
 time_predict = np.logspace(np.min(np.log10(time)), np.max(np.log10(time)), 100) # Generate log distirbuted interval
-J_creep_predict = model_creep.predict(time_predict)
+J_creep_predict = model_creep.predict(time_predict) # In the case of oscillation, the model object returns two arrays, eg G_prime, G_double_prime = model_oscillation.predict(omega_predict)
 ```
 
 Plot the results
