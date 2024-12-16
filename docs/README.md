@@ -169,10 +169,52 @@ There are several ways to plot the results obtained with pyRheo. The quickest me
 
 ```python
 # Plot the experimental data and the model prediction
-model.plot(time, J_creep, savefig=False)  # Quick overview plot
+model_creep.plot(time, J_creep, savefig=False)  # Quick overview plot
 ```
 
 <img src="images/plot.png" alt="Plotting function in pyRheo" width="500">
+
+For advanced plotting, it is possible to call the model object to predict over a given interval. First, define the new interval:
+
+```python
+# Generate predictions using the fitted model for a smooth curve
+time_predict = np.logspace(np.min(np.log10(time)), np.max(np.log10(time)), 100) # Generate log distirbuted interval
+J_creep_predict = model_creep.predict(time_predict)
+```
+
+Plot the results
+
+```python
+# Create a new figure with adjusted size for better visualization
+plt.figure(figsize=(3.2, 3))
+
+# Plot experimental data
+plt.plot(time, J_creep, 'o', markersize=6, markevery=1, alpha=1)
+
+# Plot the model predictions
+plt.plot(time_predict, J_creep_predict, '-', color="k", lw=2, label='$J(t)$ fit')
+
+# Set logarithmic scales for both axes
+plt.xscale("log")
+plt.yscale("log")
+
+# Customize axis labels, ticks, and font sizes
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.xlabel(r'$t$ [s]', fontsize=16)
+plt.ylabel(r'$J(t)$ [Pa$^{-1}$]', fontsize=16)
+
+# Add a legend with customized font size
+plt.legend(fontsize=13.5, handletextpad=0.5)
+
+# Final plot adjustments for readability
+plt.grid(False)
+plt.tight_layout()
+
+# Display the plot
+plt.show()
+```
+
 
 
 # Tutorials
