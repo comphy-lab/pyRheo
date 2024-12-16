@@ -155,6 +155,8 @@ It is also possible to store the parameters as a dictionary for further operatio
 model_creep.get_parameters()
 ```
 
+For example, the parameters are stored as:
+
 ```sh
 {'G': 25856.763541580505,
  'eta_s': 68281.08243229917,
@@ -163,9 +165,13 @@ model_creep.get_parameters()
 ```
 
 ## Plotting results
-model.plot
-or model.predict and plot with matplotlib
-use the modelevaluator to plot an analogous response. Eg, from the parameters found in relaxation, plot creep, etc.
+There are several ways to plot the results obtained with pyRheo. The quickest method is using the automatic plot function integrated in the package:
+
+```python
+# Plot the experimental data and the model prediction
+model.plot(time, J_creep, savefig=False)  # Quick overview plot
+```
+
 
 # Tutorials
 5 tutorials
