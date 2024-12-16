@@ -90,6 +90,7 @@ For fitting the data, let's first create a model object
 ```python
 model_creep = CreepModel(model="FractionalMaxwelliquid",  # Choose a model, if "auto", it will use a Machine Learning classifier to decide
                         initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
+                        bounds = "auto",                  # The auto method considers the lowest and highest values in the dataset and adds a margin. If manual, use e.g., bounds = [(1e0, 1e6), (1e0, 1e6), (0.01, 0.99)]
                         num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
                         minimization_algorithm="Powell",  # Optimization algorithm for global optimization
                         mittag_leffler_type="Pade63"      # Method to compute the Mittag-Leffler function
@@ -228,30 +229,92 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 # API
 
-## CreepModel
+## Creep
 
-## Class: `CreepModel`
+### Class: `CreepModel`
 
-### Description
+#### Description
 `CreepModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
 
 ---
 
-### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="manual", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
 | `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
-| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`.                             |
-| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"manual"`. Other options are `"random"` and `"bayesian"`. |
+| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
+| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
-| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`.                          |
+| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
 | `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
-| `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`.              |
+| `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`. Options include `"Pade32"`, `"Pade54"`, `"Pade63"`, `"Pade72"`, `"Garrappa"`             |
 
-#### Example:
-```python
-creep_model = CreepModel(model="Maxwell")
+## Stress relaxation
+
+### Class: `RelaxationModel`
+
+#### Description
+`RelaxationModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+
+---
+
+### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+
+| Parameter              | Type   | Description                    |
+|------------------------|--------|--------------------------------|
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
+| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
+| `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
+| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
+| `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+| `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`. Options include `"Pade32"`, `"Pade54"`, `"Pade63"`, `"Pade72"`, `"Garrappa"`             |
+
+## Oscillation
+
+### Class: `OscillationModel`
+
+#### Description
+`OscillationModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+
+---
+
+### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+
+| Parameter              | Type   | Description                    |
+|------------------------|--------|--------------------------------|
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
+| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
+| `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
+| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
+| `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+
+## Rotation
+
+### Class: `RotationModel`
+
+#### Description
+`RotationModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+
+---
+
+### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+
+| Parameter              | Type   | Description                    |
+|------------------------|--------|--------------------------------|
+| `model`                | `str`  | The rheological model to use. Default is `"HerschelBulkley"`. Options include `"HerschelBulkley"`, `"Bingham"`, `"PowerLaw"`, `"CarreauYasuda"`, `"Cross"`, `"Casson"`. |
+| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
+| `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
+| `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
+| `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
+| `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+
+
+
+
+
 
 
 
