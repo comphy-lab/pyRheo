@@ -27,6 +27,9 @@ Check out the Quick Start section for more information on getting started, inclu
   - [Multi-Layer Perceptron](#multi-layer-perceptron)
 - [API](#api)
   - [Creep](#creep)
+  - [Stress relaxation](#relaxation)
+  - [Oscillation](#oscillation)
+  - [Rotation](#rotation)
 
 ## pyRheo
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, oscillation, and rotation tests.
