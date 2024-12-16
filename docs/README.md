@@ -101,14 +101,26 @@ The installation will be via pip in the future. For now, the best way to use pyR
 ## Preparing data
 For using pyRheo, we recommend importing the following libraries
 
-```sh
+```python
 import pandas as pd  # For data manipulation and analysis
 import numpy as np  # For numerical operations
 import matplotlib.pyplot as plt  # For plotting
-from pyRheo.creep_model import CreepModel  # For rheological modeling
+from pyRheo.creep_model import CreepModel   # For rheological modeling
+from pyRheo.creep_model import CreepModel   # For rheological modeling
+from pyRheo.creep_model import CreepModel   # For rheological modeling
+from pyRheo.creep_model import CreepModel   # For rheological modeling
 ```
 
-Read csv file using pandas eg
+In this case, let's import experimental data from a creep experiment
+
+```python
+# The file contains time (time) and relaxation (J_creep) data.
+data = pd.read_csv('./data/polystyrene/creep_ps190_data.csv', delimiter='\t', decimal=".")
+
+# Extract time and relaxation as numpy arrays
+time = data['Time'].values
+J_creep = data['Creep Compliance'].values
+```
 
 ## Fitting data
 model.fit()
