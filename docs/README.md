@@ -172,7 +172,7 @@ There are several ways to plot the results obtained with pyRheo. The quickest me
 model.plot(time, J_creep, savefig=False)  # Quick overview plot
 ```
 
-![Plotting function in pyRheo](images/plot.png)
+<img src="images/plot.png" alt="Plotting function in pyRheo" width="500">
 
 
 # Tutorials
