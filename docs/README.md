@@ -22,44 +22,6 @@ Check out the Quick Start section for more information on getting started, inclu
   - [Fitting data](#fitting-data)
   - [Plotting results](#plotting-resutls)
   - [Analyzing results](#analyzing-results)
-- [Tutorials](#tutorials)
-  - [Tutorial: Fitting creep data](#tutorial-fitting-creep-data)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
-  - [Tutorial: Fitting stress relaxation data](#tutorial-fitting-stress-relaxation-data)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
-  - [Tutorial: Fitting oscillation data](#tutorial-fitting-oscillation-data)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
-  - [Tutorial: Fitting rotation data](#tutorial-fitting-rotation-data)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
-  - [Tutorial: Setting manual intial guesses and boundaries](#tutorial-setting-initial-guesses-and-boundaries)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-    - [Plotting model](#plotting-model)
-    - [Analyzing model parameters](#analyzing-model-parameters)
-  - [Tutorial: Setting manual intial guesses and boundaries](#tutorial-setting-initial-guesses-and-boundaries)
-    - [Import Packages](#importing-packages)
-    - [Loading data](#loading-data)
-    - [Fitting model](#fitting-model)
-- [Demos](#demos)
-  - Fitting a master curve
-  - Fitting a model with Mittag-Leffler function
 - [Machine Learning classifier](#machine-learning-classifier)
   - [Data standardization](#data-standardization)
   - [Multi-Layer Perceptron](#multi-layer-perceptron)
@@ -126,7 +88,7 @@ J_creep = data['Creep Compliance'].values
 For fitting the data, let's first create a model object
 
 ```python
-model_creep = CreepModel(model="FractionalMaxwelliquid",       # Choose a model
+model_creep = CreepModel(model="FractionalMaxwelliquid",  # Choose a model, if "auto", it will use a Machine Learning classifier to decide
                         initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
                         num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
                         minimization_algorithm="Powell",  # Optimization algorithm for global optimization
@@ -241,30 +203,11 @@ G_relax_predict = evaluator_relax.compute_model(params, time_predict, mittag_lef
 G_prime_predict, G_double_prime_predict = evaluator_oscillation.compute_model(params, time_predict) # angular frequency instead of time
 ```
 
-
 # Tutorials
-5 tutorials
-
-## Fitting creep data
-
-### Import packages
-
-### Loading data
-
-### Fitting model
-
-### Plotting model
-
-### Analyzing model parameters
-
-# Demos
-
-## Fitting a master curve
-
-## Fitting a model with Mittag-Leffler function
+The folder `/demos` contains several tutorial that show how to use pyRheo for modeling creep, stress relaxation, oscillation, and rotation data.
 
 # Machine Learning classifier
-pyRheo contains pre-trained **Multi-Layer Perceptron (MLP)** models that classifies a creep, stress relaxation, oscillation, or rotation dataset in order to automatically suggest a viscoelastic model that could likely fit the dataset. Here, we summarize how the MLP models are trained.
+pyRheo contains pre-trained **Multi-Layer Perceptron (MLP)** models that classifies a creep, stress relaxation, oscillation, or rotation dataset in order to automatically suggest a viscoelastic model that could likely fit the dataset. This option is called when setting, for example, `model_creep = CreepModel(model="auto")`. Here, we summarize how the MLP models are trained. Note that the user does not require to change their data. The following information is for transparency purposes, and it is automated in pyRheo.
 
 ## Data standardization
 The **MLP** models are trained with synthetic data generated from randomly assigning values to parameters in the constitutive equations of several viscoelatic models. The latter results in material functions (eg., creep compliance *J(t)*) computed over a time, angular frequency, or shear rate range. The training dataset is built by generating 1 million materials functions. Over the 1 million computations, we randomly varied the models and their parameters values. In the end, we record the magnitude of the material function from every computation and its correspondig label; for example, to train the MLP classfier for creep, we record in every computation the creep compliance and the name of the model that was used to generate the creep compliance data.
@@ -281,10 +224,7 @@ $$
 
 where $z$ is the result of the log-transformation, and $\hat{z}$ is the standardized log-transformed data ($\mu$ is the mean and $s$ the standard deviation).
 
-To deal with different dataset sizes, we use principal component analysis (PCA) for dimensionality reduction, which finds that the minimum requiried to describe a dataset is 10 components. Accordingly, the minimum size of a dataset that the user can input to the MLP is a material function with 10 records.
-
-## MLP
-The user can employ the MLP model when using the `auto` argument 
+To deal with different dataset sizes, we use principal component analysis (PCA) for dimensionality reduction, which finds that the minimum requiried to describe a dataset is 10 components. Accordingly, the minimum size of a dataset that the user can input to the MLP is a material function with 10 records. 
 
 # API
 
