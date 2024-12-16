@@ -99,19 +99,19 @@ Issues, suggestions, feedback, or any comment can be sent directly to isaac.mira
 The installation will be via pip in the future. For now, the best way to use pyRheo is by cloning the respository.
 
 ## Preparing data
-For using pyRheo, we recommend importing the following libraries
+For using pyRheo, we recommend importing the following libraries:
 
 ```python
 import pandas as pd  # For data manipulation and analysis
 import numpy as np  # For numerical operations
 import matplotlib.pyplot as plt  # For plotting
 from pyRheo.creep_model import CreepModel   # For rheological modeling
-from pyRheo.creep_model import CreepModel   # For rheological modeling
-from pyRheo.creep_model import CreepModel   # For rheological modeling
-from pyRheo.creep_model import CreepModel   # For rheological modeling
+from pyRheo.relaxation_model import RelaxationModel   # For rheological modeling
+from pyRheo.oscillation_model import OscillationModel   # For rheological modeling
+from pyRheo.rotation_model import RotationModel   # For rheological modeling
 ```
 
-In this case, let's import experimental data from a creep experiment
+In this case, let's import experimental data from a creep experiment:
 
 ```python
 # The file contains time (time) and relaxation (J_creep) data.
@@ -123,7 +123,22 @@ J_creep = data['Creep Compliance'].values
 ```
 
 ## Fitting data
-model.fit()
+For fitting the data, let's first create a model object
+
+```python
+model_creep = CreepModel(model="auto",                    # Automatically selects a model using machine learning
+                        initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
+                        num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
+                        minimization_algorithm="Powell",  # Optimization algorithm for global optimization
+                        mittag_leffler_type="Pade63"      # Method to compute the Mittag-Leffler function
+                        )
+```
+
+Fit the defined model object
+
+```python
+model_creep.fit(time, J_creep)
+```
 
 ## Analyzing results
 model.print_parameters()
