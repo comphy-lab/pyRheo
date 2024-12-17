@@ -11,6 +11,7 @@ setup(
         'joblib',
         'scikit-learn',
         'matplotlib',
+        'pandas',
     ],
     include_package_data=True,
     package_data={
@@ -25,8 +26,8 @@ setup(
     long_description_content_type='text/markdown',
     url='http://github.com/mirandi1/pyRheo',
     classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.10',
+        'License :: OSI Approved :: GNU License',
         'Operating System :: OS Independent',
     ],
 )
