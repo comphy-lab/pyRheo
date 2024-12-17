@@ -14,7 +14,7 @@ Publication of this work is coming soon. Please cite this software using the met
 - [License](#license)
 
 ## Documentation
-Refer to the `doc/` folder to learn more about the package and how to utilize its API. The Documentation will be available via ReadtheDocs once the repository is public.
+Refer to the `docs/` folder to learn more about the package and how to utilize its API. The Documentation will be available via ReadtheDocs once the repository is public.
 
 
 ## Installation
