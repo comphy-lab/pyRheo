@@ -14,7 +14,7 @@ Publication of this work is coming soon. Please cite this software using the met
 - [License](#license)
 
 ## Documentation
-Refer to the `\doc` folder to learn more about the package and how to utilize its API. The Documentation will be available via ReadtheDocs once the repository is public.
+Refer to the `doc/` folder to learn more about the package and how to utilize its API. The Documentation will be available via ReadtheDocs once the repository is public.
 
 
 ## Installation
@@ -77,10 +77,10 @@ G_relax_predict = model.predict(time_predict)
 ```
 
 ## Demos
-Examples of the software's functionality can be found in the demos/ directory, which showcases how to use all the modules in pyRheo.
+Examples of the software's functionality can be found in the `demos/` directory, which showcases how to use all the modules in pyRheo.
 
 ## GUI
-For a graphical user interface  (GUI) of pyRheo, follow the instructions in the gui/ directory.
+For a graphical user interface  (GUI) of pyRheo, follow the instructions in the `gui/` directory.
 
 ## Contributing
 Inquiries and suggestions can be directed to isaac.mirandavaldez[at]aalto.fi or by raising an issue here.
