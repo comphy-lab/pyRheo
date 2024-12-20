@@ -204,7 +204,9 @@ class OscillationModel(BaseModel):
             residual = y_true - y_pred
             weights = y_true
             normalized_residuals = residual / y_true
-            return np.sum(np.abs(normalized_residuals))
+            rss = np.sum((normalized_residuals)**2)
+            #print(rss)
+            return rss
 
         search_space = self._get_search_space(G_prime, G_double_prime)
         print("Search space:", search_space)

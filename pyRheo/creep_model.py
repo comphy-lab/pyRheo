@@ -1,6 +1,7 @@
 from scipy.optimize import minimize
 from skopt import gp_minimize
 from skopt.space import Real
+from skopt.plots import plot_convergence
 from .base_model import BaseModel
 from .rheo_models.creep_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
@@ -223,13 +224,17 @@ class CreepModel(BaseModel):
             residual = y_true - y_pred
             weights = y_true
             normalized_residuals = residual / y_true
-            return np.sum(np.abs(normalized_residuals))
+            rss = np.sum((normalized_residuals)**2)
+            #print(rss)
+            return rss
 
 
         search_space = self._get_search_space(J_creep)
         print("Search space:", search_space)
 
         result = gp_minimize(residuals, search_space, n_calls=self.num_initial_guesses, acq_func="EI", xi=0.01, initial_point_generator="sobol", n_initial_points=self.num_initial_guesses // 2)
+        #print(result)
+        #ax1 = plot_convergence(result)
 
         # Getting the best result from gp_minimize
         initial_guess_log = result.x
@@ -270,13 +275,13 @@ class CreepModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha = np.random.uniform(0, 1)
+                alpha = np.random.uniform(0.001, 0.98)
                 initial_guess.append(alpha)
             elif name == 'beta':
                 if alpha is not None:
-                    beta = np.random.uniform(0, alpha)
+                    beta = np.random.uniform(0.001, alpha)
                 else:
-                    beta = np.random.uniform(0, 1)
+                    beta = np.random.uniform(0.001, 0.98)
                 initial_guess.append(beta)
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
@@ -293,13 +298,13 @@ class CreepModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha_bound = (0, 1)
+                alpha_bound = (0.001, 0.98)
                 bounds.append(alpha_bound)
             elif name == 'beta':
                 if alpha_bound is not None:
-                    beta_bound = (0, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
+                    beta_bound = (0.001, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
                 else:
-                    beta_bound = (0, 1)
+                    beta_bound = (0.001, 0.98)
                 bounds.append(beta_bound)
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
@@ -314,13 +319,13 @@ class CreepModel(BaseModel):
 
     def _get_search_space(self, J_creep):
         search_space = []
-        alpha_bound = Real(0, 1)
+        alpha_bound = Real(0.0001, 0.98)
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
                 search_space.append(alpha_bound)
             elif name == 'beta':
-                search_space.append(Real(0, 1))  # Initial dummy bound for search space
+                search_space.append(Real(0.0001, 0.98))  # Initial dummy bound for search space
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
                 search_space.append(Real(np.log10(range_min), np.log10(range_max)))  # Log10 search space
@@ -344,6 +349,15 @@ class CreepModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         print(f"RSS: {self.rss_}")
+
+    def get_parameters(self):
+        if not self.fitted_:
+            raise ValueError("Model must be fitted before retrieving parameters.")
+
+        param_names = MODEL_PARAMS[self.model]
+        parameters = {name: param for name, param in zip(param_names, self.params_)}
+        parameters["RSS"] = self.rss_
+        return parameters
 
     def print_error(self):
         if not hasattr(self, 'y_true') or not hasattr(self, 'y_pred'):

@@ -146,7 +146,10 @@ class RotationModel(BaseModel):
             y_pred = model_func(*params, gamma_dot)
             residual = y_true - y_pred
             weights = y_true
-            return np.sum((residual / weights)**2)
+            normalized_residuals = residual / y_true
+            rss = np.sum((normalized_residuals)**2)
+            #print(rss)
+            return rss
 
         best_rss = np.inf
         best_params = None
@@ -286,6 +289,15 @@ class RotationModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         print(f"RSS: {self.rss_}")
+
+    def get_parameters(self):
+        if not self.fitted_:
+            raise ValueError("Model must be fitted before retrieving parameters.")
+
+        param_names = MODEL_PARAMS[self.model]
+        parameters = {name: param for name, param in zip(param_names, self.params_)}
+        parameters["RSS"] = self.rss_
+        return parameters
 
     def print_error(self):
         if not hasattr(self, 'y_true') or not hasattr(self, 'y_pred'):

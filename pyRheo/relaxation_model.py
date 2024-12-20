@@ -135,9 +135,9 @@ class RelaxationModel(BaseModel):
             initial_guesses = self._generate_initial_guess(G_relax, use_log=(self.initial_guesses == "random"))
 
         # Check if the initial guess method is supported for the selected model
-        if self.initial_guesses == "bayesian" and self.model in ["FractionalMaxwellGel", "FractionalMaxwellLiquid", "FractionalMaxwell", "FractionalZenerLiquidS", "FractionalZenerSolidS"]:
-            print(f"Bayesian method not supported for model {self.model}. Switching to random method.")
-            self.initial_guesses = "random"
+        #if self.initial_guesses == "bayesian" and self.model in ["FractionalMaxwellGel", "FractionalMaxwellLiquid", "FractionalMaxwell", "FractionalZenerLiquidS", "FractionalZenerSolidS"]:
+        #    print(f"Bayesian method not supported for model {self.model}. Switching to random method.")
+        #    self.initial_guesses = "random"
 
         if self.initial_guesses == "manual":
             return self._fit_model(time, G_relax, *initial_guesses, model_func=self.model_func)
@@ -230,7 +230,9 @@ class RelaxationModel(BaseModel):
             residual = y_true - y_pred
             weights = y_true
             normalized_residuals = residual / y_true
-            return np.sum(np.abs(normalized_residuals))
+            rss = np.sum((normalized_residuals)**2)
+            #print(rss)
+            return rss
 
         search_space = self._get_search_space(G_relax)
         print("Search space:", search_space)
@@ -276,13 +278,13 @@ class RelaxationModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha = np.random.uniform(0, 1)
+                alpha = np.random.uniform(0.0001, 0.99)
                 initial_guess.append(alpha)
             elif name == 'beta':
                 if alpha is not None:
-                    beta = np.random.uniform(0, alpha)
+                    beta = np.random.uniform(0.0001, alpha)
                 else:
-                    beta = np.random.uniform(0, 1)
+                    beta = np.random.uniform(0.0001, 0.99)
                 initial_guess.append(beta)
             else:
                 range_min, range_max = self._get_param_bounds(G_relax)
@@ -299,13 +301,13 @@ class RelaxationModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha_bound = (0, 1)
+                alpha_bound = (0.0001, 0.99)
                 bounds.append(alpha_bound)
             elif name == 'beta':
                 if alpha_bound is not None:
-                    beta_bound = (0, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
+                    beta_bound = (0.0001, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
                 else:
-                    beta_bound = (0, 1)
+                    beta_bound = (0.0001, 0.99)
                 bounds.append(beta_bound)
             else:
                 range_min, range_max = self._get_param_bounds(G_relax)
@@ -320,13 +322,13 @@ class RelaxationModel(BaseModel):
 
     def _get_search_space(self, G_relax):
         search_space = []
-        alpha_bound = Real(0, 1)
+        alpha_bound = Real(0.0001, 0.99)
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
                 search_space.append(alpha_bound)
             elif name == 'beta':
-                search_space.append(Real(0, 1))  # Initial dummy bound for search space
+                search_space.append(Real(0.0001, 0.99))  # Initial dummy bound for search space
             else:
                 range_min, range_max = self._get_param_bounds(G_relax)
                 search_space.append(Real(np.log10(range_min), np.log10(range_max)))  # Log10 search space
@@ -350,6 +352,15 @@ class RelaxationModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         print(f"RSS: {self.rss_}")
+
+    def get_parameters(self):
+        if not self.fitted_:
+            raise ValueError("Model must be fitted before retrieving parameters.")
+
+        param_names = MODEL_PARAMS[self.model]
+        parameters = {name: param for name, param in zip(param_names, self.params_)}
+        parameters["RSS"] = self.rss_
+        return parameters
 
     def print_error(self):
         if not hasattr(self, 'y_true') or not hasattr(self, 'y_pred'):
