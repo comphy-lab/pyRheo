@@ -44,7 +44,7 @@ Upon running the command, the GUI window titled "pyRheo Creep Model Fitting" wil
 ## Step 3: Using the GUI
 
 ### Loading Data
-1. Click on the **"Load Data"** button to select the data file to use. The data file should be a CSV file with columns with header "Time" and "Creep Compliance", followed by their corresponding data. The user can look at the file `creep_ps190_data.csv` to understand the requirements in the file structure before loading. The delimiter between columns should be comma "," and decimal ".". Column headers in case of relaxation: "Time" and "Relaxation Modulus". Column headers in case of oscillation: "Angular Frequency" and "Storage Modulus", and "Loss Modulus". Column headers in case of rotation: "Shear Rate" and "Viscosity".
+1. Click on the **"Load Data"** button to select the data file to use. The data file should be a CSV file with columns with header "Time" and "Creep Compliance", followed by their corresponding data. The user can look at the file `creep_ps190_data.csv` to understand the requirements in the file structure before loading. The delimiter between columns should be comma "tab" and decimal ".". Column headers in case of relaxation: "Time" and "Relaxation Modulus". Column headers in case of oscillation: "Angular Frequency" and "Storage Modulus", and "Loss Modulus". Column headers in case of rotation: "Shear Rate" and "Viscosity".
 2. After successfully loading the data, a message box will notify you.
 
 ![Successful data load prompt](screenshots/screenshot_pyRheo_GUI_load.png)
