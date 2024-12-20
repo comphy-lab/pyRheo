@@ -43,7 +43,7 @@ of materials**. If you use the software and feel that it was useful for your res
     doi = {},
     url = {},
     author = {Miranda-Valdez, Isaac Y. and Niinistö, Aaro and Mäkinen, Tero and Koivisto, Juha and Alava, Mikko J.},
-    title = {pyRheo: An open-source Python package for rheology of materials},
+    title = {pyRheo: An open-source Python package for complex rheology},
     publisher = {arXiv},
     year = {2024},
 }
@@ -53,7 +53,7 @@ of materials**. If you use the software and feel that it was useful for your res
 No news at the moment.
 
 ## Installation
-At the moment, the way to install **pyRheo** is via cloning the GitHub repository. Later on, it will be easier with Python Package Index using pip.
+At the moment, the way to install **pyRheo** is via pip as instructed in the main page of the GitHub repository. Later on, it will be easier with Python Package Index using pip.
 
 ## Contributing
 Issues, suggestions, feedback, or any comment can be sent directly to isaac.mirandavaldez[at].aalto.fi or by rising an issues on pyRheo's GitHub.
@@ -61,7 +61,7 @@ Issues, suggestions, feedback, or any comment can be sent directly to isaac.mira
 # Quick start
 
 ## Installation
-The installation will be via pip in the future. For now, the best way to use pyRheo is by cloning the respository.
+The installation is via pip as instructed in the main page. 
 
 ## Preparing data
 For using pyRheo, we recommend importing the following libraries:
