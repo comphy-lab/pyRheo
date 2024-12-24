@@ -105,7 +105,7 @@ J_creep = data['Creep Compliance'].values
 For fitting the data, let's first create a model object
 
 ```python
-model_creep = CreepModel(model="FractionalMaxwelliquid",  # Choose a model, if "auto", it will use a Machine Learning classifier to decide
+model_creep = CreepModel(model="FractionalMaxwellLiquid",  # Choose a model, if "auto", it will use a Machine Learning classifier to decide
                         initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
                         bounds = "auto",                  # The auto method considers the lowest and highest values in the dataset and adds a margin. If manual, use e.g., bounds = [(1e0, 1e6), (1e0, 1e6), (0.01, 0.99)]
                         num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
