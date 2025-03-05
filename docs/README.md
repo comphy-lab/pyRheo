@@ -35,8 +35,7 @@ Check out the Quick Start section for more information on getting started, inclu
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, oscillation, and rotation tests.
 
 ## Citing
-This package is based on the methodology described in **pyRheo: An open-source Python package for rheology
-of materials**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
+This package is based on the methodology described in **pyRheo: An open-source Python package for complex rheology**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
 
 ```
 @article{miranda-valdez_niinisto_makinen_koivisto_alava_2024,
@@ -86,8 +85,8 @@ import numpy as np  # For numerical operations
 import matplotlib.pyplot as plt  # For plotting
 from pyRheo.creep_model import CreepModel   # For rheological modeling
 from pyRheo.relaxation_model import RelaxationModel   # For rheological modeling
-from pyRheo.oscillation_model import OscillationModel   # For rheological modeling
-from pyRheo.rotation_model import RotationModel   # For rheological modeling
+from pyRheo.oscillation_model import SAOSModel   # For rheological modeling
+from pyRheo.rotation_model import SteadyShearModel   # For rheological modeling
 ```
 
 In this case, let's import experimental data from a creep experiment:
@@ -290,10 +289,10 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ## Oscillation
 
-### Class: `OscillationModel`
+### Class: `SAOSModel`
 
 #### Description
-`OscillationModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+`SAOSModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
 
 ---
 
@@ -310,10 +309,10 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ## Rotation
 
-### Class: `RotationModel`
+### Class: `SteadyShearModel`
 
 #### Description
-`RotationModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
+`SteadyShearModel` allows you to fit and predict various rheological creep models. It supports multiple optimization methods and automatic model selection.
 
 ---
 
