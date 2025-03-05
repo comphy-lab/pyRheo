@@ -258,7 +258,7 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
-| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
 | `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
@@ -279,7 +279,7 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
-| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
 | `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
@@ -300,7 +300,7 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
-| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"auto"` for automatic model selection. |
+| `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
 | `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
