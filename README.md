@@ -106,6 +106,8 @@ K. R. Lennon, G. H. McKinley and J. W. Swan, Data-Centric Engineering, 2023, 4, 
 
 R. I. Dekker, M. Dinkgreve, H. D. Cagny, D. J. Koeze, B. P. Tighe and D. Bonn, Journal of Non-Newtonian Fluid Mechanics, 2018, 261, 33–37.
 
+V. A. H. Boudara, D. J. Read, J. Ramírez, Journal of Rheology, 2020, 64, 709-722.
+
 
 Mittag-Leffler algorithms were implemented based on:
 
