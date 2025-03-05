@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyRheo',
-    version='1.0.0',
+    version='1.0.1',
     packages=find_packages(),  # Automatically discovers all packages and sub-packages
     install_requires=[
         'scipy',
