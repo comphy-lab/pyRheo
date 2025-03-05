@@ -33,7 +33,7 @@ Once the package has been installed, you can simply import its modules:
 from pyRheo.creep_model import CreepModel
 from pyRheo.relaxation_model import RelaxationModel
 from pyRheo.oscillation_model import SAOSModel
-from pyRheo.rotation_model import RotationpModel
+from pyRheo.rotation_model import SteadyShearModel
 ```
 
 ### Modeling data with pyRheo
