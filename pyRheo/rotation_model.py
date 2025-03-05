@@ -12,6 +12,8 @@ import os
 from scipy.ndimage import gaussian_filter1d
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
+import warnings
+
 
 MODEL_FUNCS = {
     "HerschelBulkley": HerschelBulkley,
@@ -40,7 +42,7 @@ CLASSIFIER_MODELS = {
     5: "Casson"
 }
 
-class RotationModel(BaseModel):
+class SteadyShearModel(BaseModel):
     def __init__(self, model="HerschelBulkley", method="RSS", initial_guesses="manual", bounds="auto", minimization_algorithm="Nelder-Mead", num_initial_guesses=64):
         super().__init__(model, method, initial_guesses, bounds)
         if model != "auto" and model not in MODEL_FUNCS:
@@ -338,3 +340,13 @@ class RotationModel(BaseModel):
             plt.savefig(filename, dpi=dpi, format=file_format, bbox_inches='tight')
 
         plt.show()
+        
+# Now define the OscillationModel subclass that issues a deprecation warning when used.
+class RotationModel(SteadyShearModel):
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "RotationModel will be deprecated and will be removed in future versions. Please use SteadyShearModel instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(*args, **kwargs)

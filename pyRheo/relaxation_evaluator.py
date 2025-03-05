@@ -2,7 +2,7 @@ from .rheo_models.relaxation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD, FractionalZenerS
+    FractionalZenerLiquidD, FractionalZenerS, FractionalZener
 )
 import numpy as np
 import os
@@ -27,7 +27,8 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
-    "FractionalZenerS": FractionalZenerS
+    "FractionalZenerS": FractionalZenerS,
+    "FractionalZener" : FractionalZener
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -45,6 +46,7 @@ MODEL_PARAMS = {
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_p", "G", "eta_s", "beta"],
     "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
+    "FractionalZener": ["G", "V", "K", "alpha", "beta", "kappa"]
 }
 
 

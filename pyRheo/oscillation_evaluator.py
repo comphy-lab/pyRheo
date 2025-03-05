@@ -2,11 +2,12 @@ from .rheo_models.oscillation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD, FractionalZenerS
+    FractionalZenerLiquidD, FractionalZenerS, FractionalZener
 )
 import numpy as np
 import os
 import math
+import warnings
 
 
 # Dummy BaseModel class for completeness (this should be defined elsewhere in your project)
@@ -29,7 +30,8 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
-    "FractionalZenerS" : FractionalZenerS
+    "FractionalZenerS" : FractionalZenerS,
+    "FractionalZener" : FractionalZener
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -47,11 +49,12 @@ MODEL_PARAMS = {
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_p", "G", "eta_s", "beta"],
     "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
+    "FractionalZener": ["G", "V", "K", "alpha", "beta", "kappa"]
 }
 
 
 # New class to evaluate the model given fixed parameters
-class OscillationEvaluator:
+class SAOSEvaluator:
     def __init__(self, model="Maxwell"):
         if model not in MODEL_FUNCS:
             raise ValueError(f"Model {model} not recognized.")
@@ -68,3 +71,14 @@ class OscillationEvaluator:
         G_double_prime = model_values[half:]
         
         return G_prime, G_double_prime
+        
+        
+# Now define the OscillationModel subclass that issues a deprecation warning when used.
+class OscillationEvaluator(SAOSEvaluator):
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "OscillationEvaluator will be deprecated and will be removed in future versions. Please use SAOSEvaluator instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(*args, **kwargs)

@@ -4,6 +4,7 @@ from .rheo_models.rotation_models import (
 import numpy as np
 import os
 import math
+import warnings
 
 # Dummy BaseModel class for completeness (this should be defined elsewhere in your project)
 class BaseModel:
@@ -31,7 +32,7 @@ MODEL_PARAMS = {
 }
 
 # New class to evaluate the model given fixed parameters
-class RotationEvaluator:
+class SteadyShearEvaluator:
     def __init__(self, model="PowerLaw"):
         if model not in MODEL_FUNCS:
             raise ValueError(f"Model {model} not recognized.")
@@ -47,3 +48,13 @@ class RotationEvaluator:
         eta = model_values
         
         return eta
+        
+# Now define the OscillationModel subclass that issues a deprecation warning when used.
+class RotationEvaluator(SteadyShearEvaluator):
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "RotationEvaluator will be deprecated and will be removed in future versions. Please use SteadyShearEvaluator instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(*args, **kwargs)

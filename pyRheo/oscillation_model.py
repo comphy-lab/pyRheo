@@ -6,7 +6,7 @@ from .rheo_models.oscillation_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD, FractionalZenerS
+    FractionalZenerLiquidD, FractionalZenerS, FractionalZener
 )
 import numpy as np
 import os
@@ -15,6 +15,8 @@ import joblib
 from scipy.ndimage import gaussian_filter1d
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
+import warnings
+
 
 # Dictionary mapping model names to their respective classes
 MODEL_FUNCS = {
@@ -30,7 +32,8 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
-    "FractionalZenerS" : FractionalZenerS
+    "FractionalZenerS" : FractionalZenerS,
+    "FractionalZener" : FractionalZener
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -48,6 +51,7 @@ MODEL_PARAMS = {
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_p", "G", "eta_s", "beta"],
     "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
+    "FractionalZener": ["G", "V", "K", "alpha", "beta", "kappa"]
 }
 
 # Dictionary mapping classifier indices to model names
@@ -60,7 +64,7 @@ CLASSIFIER_MODELS = {
     5: "FractionalKelvinVoigt"
 }
 
-class OscillationModel(BaseModel):
+class SAOSModel(BaseModel):
     def __init__(self, model="Maxwell", method="RSS", initial_guesses="manual", bounds="auto", minimization_algorithm="Nelder-Mead", num_initial_guesses=64):
         super().__init__(model, method, initial_guesses, bounds)
         if model != "auto" and model not in MODEL_FUNCS:
@@ -133,11 +137,28 @@ class OscillationModel(BaseModel):
             self.initial_guesses = "random"
 
         if self.initial_guesses == "manual":
-            return self._fit_model(omega, G_prime, G_double_prime, *initial_guesses, model_func=self.model_func)
+            fit_result = self._fit_model(omega, G_prime, G_double_prime, *initial_guesses, model_func=self.model_func)
         elif self.initial_guesses == "random":
-            return self._fit_model_random(omega, G_prime, G_double_prime, model_func=self.model_func)
+            fit_result = self._fit_model_random(omega, G_prime, G_double_prime, model_func=self.model_func)
         elif self.initial_guesses == "bayesian":
-            return self._fit_model_bayesian(omega, G_prime, G_double_prime, model_func=self.model_func)
+            fit_result = self._fit_model_bayesian(omega, G_prime, G_double_prime, model_func=self.model_func)
+        
+        self._check_fit_parameters()
+        return fit_result
+
+    def _check_fit_parameters(self):
+        if not self.fitted_:
+            raise ValueError("Model must be fitted before checking parameters.")
+        param_names = MODEL_PARAMS[self.model]
+        for name, param in zip(param_names, self.params_):
+            if name == 'alpha' and param > 0.9:
+                print("Consider replacing the alpha springpot element with a dashpot.")
+            if name == 'beta' and param < 0.1:
+                print("Consider replacing the beta springpot element with a spring.")
+            if name == 'kappa' and param > 0.9:
+                print("Consider replacing the kappa springpot element with a dashpot.")
+            if name == 'kappa' and param < 0.1:
+                print("Consider replacing the kappa springpot element with a spring.")
 
     def _fit_model(self, omega, G_prime, G_double_prime, *initial_guesses, model_func):
         y_true = np.concatenate([G_prime, G_double_prime])
@@ -152,6 +173,7 @@ class OscillationModel(BaseModel):
         print("Using bounds:", bounds)
 
         result = minimize(residuals, initial_guesses, method=self.minimization_algorithm, bounds=bounds)
+        print("Iterations used:", result.nit)
         self.params_ = result.x
         y_pred = model_func(*self.params_, omega)
         self.rss_ = self.calculate_rss(y_true, y_pred)
@@ -178,6 +200,7 @@ class OscillationModel(BaseModel):
             bounds = self._get_bounds(initial_guess, G_prime, G_double_prime, use_log=False)
             result = minimize(residuals, initial_guess, method=self.minimization_algorithm, bounds=bounds)
             if result.success and result.fun < best_rss:
+                print("Iterations used:", result.nit)
                 best_rss = result.fun
                 best_params = result.x
                 best_initial_guess = initial_guess  # Update the best initial guess
@@ -212,20 +235,21 @@ class OscillationModel(BaseModel):
         print("Search space:", search_space)
 
         result = gp_minimize(residuals, search_space, n_calls=self.num_initial_guesses, acq_func="EI", xi=0.01, initial_point_generator="sobol", n_initial_points=self.num_initial_guesses // 2)
-
+        print("Iterations used:", result.nit)
+        
         # Getting the best result from gp_minimize
         initial_guess_log = result.x
         print("Best initial guess was:", initial_guess_log)
     
         # Transforming initial guesses back to original scale
-        initial_guess = [10 ** param if name not in ['alpha', 'beta'] else param for param, name in zip(result.x, MODEL_PARAMS[self.model])]
+        initial_guess = [10 ** param if name not in ['alpha', 'beta', 'kappa'] else param for param, name in zip(result.x, MODEL_PARAMS[self.model])]
 
         # Get bounds in the original scale
         bounds = self._get_bounds(initial_guess, G_prime, G_double_prime, use_log=False)
 
         # Residuals function in the original parameter space
         def residuals_original_scale(params):
-            log_params = [np.log10(param) if name not in ['alpha', 'beta'] else param for param, name in zip(params, MODEL_PARAMS[self.model])]
+            log_params = [np.log10(param) if name not in ['alpha', 'beta', 'kappa'] else param for param, name in zip(params, MODEL_PARAMS[self.model])]
             return residuals(log_params)
 
         # Use minimize with the initial guesses from gp_minimize
@@ -257,6 +281,9 @@ class OscillationModel(BaseModel):
                 else:
                     beta = np.random.uniform(0, 1)
                 initial_guess.append(beta)
+            elif name == 'kappa':
+                kappa = np.random.uniform(0, 1)
+                initial_guess.append(kappa)
             else:
                 range_min, range_max = self._get_param_bounds(G_prime, G_double_prime)
                 initial_guess.append(np.random.uniform(np.log10(range_min) if use_log else range_min, np.log10(range_max) if use_log else range_max))
@@ -280,6 +307,8 @@ class OscillationModel(BaseModel):
                 else:
                     beta_bound = (0, 1)
                 bounds.append(beta_bound)
+            elif name == 'kappa':
+                bounds.append((0, 1))
             else:
                 range_min, range_max = self._get_param_bounds(G_prime, G_double_prime)
                 bounds.append((np.log10(range_min) if use_log else range_min, np.log10(range_max) if use_log else range_max))
@@ -287,8 +316,8 @@ class OscillationModel(BaseModel):
         return bounds
 
     def _get_param_bounds(self, G_prime, G_double_prime):
-        range_min = np.min(G_double_prime) / 100
-        range_max = np.max(G_prime) * 100
+        range_min = np.min(G_double_prime) / 1000
+        range_max = np.max(G_prime) * 1000
         return (range_min, range_max)
 
     def _get_search_space(self, G_prime, G_double_prime):
@@ -300,6 +329,8 @@ class OscillationModel(BaseModel):
                 search_space.append(alpha_bound)
             elif name == 'beta':
                 search_space.append(Real(0, 1))  # Initial dummy bound for search space
+            elif name == 'kappa':
+                search_space.append(Real(0, 1))
             else:
                 range_min, range_max = self._get_param_bounds(G_prime, G_double_prime)
                 search_space.append(Real(np.log10(range_min), np.log10(range_max)))  # Log10 search space
@@ -376,3 +407,13 @@ class OscillationModel(BaseModel):
             plt.savefig(filename, dpi=dpi, format=file_format, bbox_inches='tight')
 
         plt.show()
+
+# Now define the OscillationModel subclass that issues a deprecation warning when used.
+class OscillationModel(SAOSModel):
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "OscillationModel will be deprecated and will be removed in future versions. Please use SAOSModel instead.",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        super().__init__(*args, **kwargs)

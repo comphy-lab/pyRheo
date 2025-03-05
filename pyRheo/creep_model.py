@@ -7,7 +7,7 @@ from .rheo_models.creep_models import (
     MaxwellModel, SpringPot, FractionalMaxwellGel, FractionalMaxwellLiquid,
     FractionalMaxwellModel, FractionalKelvinVoigtS, FractionalKelvinVoigtD,
     FractionalKelvinVoigtModel, ZenerModel, FractionalZenerSolidS, FractionalZenerLiquidS,
-    FractionalZenerLiquidD, FractionalZenerS
+    FractionalZenerLiquidD, FractionalZenerS, FractionalZener
 )
 import numpy as np
 import math
@@ -31,7 +31,8 @@ MODEL_FUNCS = {
     "FractionalZenerSolidS": FractionalZenerSolidS,
     "FractionalZenerLiquidS": FractionalZenerLiquidS,
     "FractionalZenerLiquidD": FractionalZenerLiquidD,
-    "FractionalZenerS" : FractionalZenerS
+    "FractionalZenerS" : FractionalZenerS,
+    "FractionalZener" : FractionalZener
 }
 
 # Dictionary mapping model names to their respective parameters
@@ -49,13 +50,13 @@ MODEL_PARAMS = {
     "FractionalZenerLiquidS": ["G_p", "G", "eta_s", "beta"],
     "FractionalZenerLiquidD": ["eta_p", "G", "eta_s", "beta"],
     "FractionalZenerS": ["G_p", "G", "V", "alpha", "beta"],
+    "FractionalZener": ["G", "V", "K", "alpha", "beta", "kappa"]
 }
 
+# Dictionary mapping classifier indices to model names
 CLASSIFIER_MODELS = {
     0: "Maxwell",
     1: "SpringPot",
-    #2: "FractionalMaxwellLiquid",
-    #3: "FractionalMaxwellGel",
     2: "FractionalMaxwell",
     3: "FractionalKelvinVoigt"
 }
@@ -112,12 +113,9 @@ class CreepModel(BaseModel):
         time = interpolation[0]
         interpolatedcreepModulus = np.log10(interpolatedcreepModulus) # Improved performance as it handles better the specific distribution of the experimental data
         interpolatedcreepModulus = StandardScaler().fit_transform(interpolatedcreepModulus.reshape(-1, 1)).flatten() # Improved performance as it handles better the specific distribution of the experimental data
-        #integral = _integration(interpolatedcreepModulus, time)
         
         pca_components = _getRelaxtionPCA(interpolatedcreepModulus, time)
-        #components = np.hstack((pca_components, np.array(integral).reshape(-1, 1)))
         prediction = self.classifier.predict(pca_components)[0]
-        #prediction = self.classifier.predict(pca_components)[0] ############ This can change
         predicted_model = CLASSIFIER_MODELS[prediction]
         print(f"Predicted Model: {predicted_model}")
         return predicted_model
@@ -134,11 +132,28 @@ class CreepModel(BaseModel):
         #    self.initial_guesses = "random"
 
         if self.initial_guesses == "manual":
-            return self._fit_model(time, J_creep, *initial_guesses, model_func=self.model_func)
+            fit_result = self._fit_model(time, J_creep, *initial_guesses, model_func=self.model_func)
         elif self.initial_guesses == "random":
-            return self._fit_model_random(time, J_creep, model_func=self.model_func)
+            fit_result = self._fit_model_random(time, J_creep, model_func=self.model_func)
         elif self.initial_guesses == "bayesian":
-            return self._fit_model_bayesian(time, J_creep, model_func=self.model_func)
+            fit_result = self._fit_model_bayesian(time, J_creep, model_func=self.model_func)
+      
+        self._check_fit_parameters()
+        return fit_result
+
+    def _check_fit_parameters(self):
+        if not self.fitted_:
+            raise ValueError("Model must be fitted before checking parameters.")
+        param_names = MODEL_PARAMS[self.model]
+        for name, param in zip(param_names, self.params_):
+            if name == 'alpha' and param > 0.9:
+                print("Consider replacing the alpha springpot element with a dashpot.")
+            if name == 'beta' and param < 0.1:
+                print("Consider replacing the beta springpot element with a spring.")
+            if name == 'kappa' and param > 0.9:
+                print("Consider replacing the kappa springpot element with a dashpot.")
+            if name == 'kappa' and param < 0.1:
+                print("Consider replacing the kappa springpot element with a spring.")
 
     def _fit_model(self, time, J_creep, *initial_guesses, model_func):
         y_true = J_creep
@@ -226,13 +241,12 @@ class CreepModel(BaseModel):
             normalized_residuals = residual / y_true
             rss = np.sum((normalized_residuals)**2)
             #print(rss)
-            return rss
-
+            return np.log10(rss)
 
         search_space = self._get_search_space(J_creep)
         print("Search space:", search_space)
 
-        result = gp_minimize(residuals, search_space, n_calls=self.num_initial_guesses, acq_func="EI", xi=0.01, initial_point_generator="sobol", n_initial_points=self.num_initial_guesses // 2)
+        result = gp_minimize(residuals, search_space, n_calls=int(self.num_initial_guesses * 0.5) , acq_func="EI", xi=0.1, initial_point_generator="halton", n_initial_points=int(self.num_initial_guesses * 0.5))
         #print(result)
         #ax1 = plot_convergence(result)
 
@@ -241,14 +255,14 @@ class CreepModel(BaseModel):
         print("Best initial guess was:", initial_guess_log)
     
         # Transforming initial guesses back to original scale
-        initial_guess = [10 ** param if name not in ['alpha', 'beta'] else param for param, name in zip(result.x, MODEL_PARAMS[self.model])]
+        initial_guess = [10 ** param if name not in ['alpha', 'beta', 'kappa'] else param for param, name in zip(result.x, MODEL_PARAMS[self.model])]
 
         # Get bounds in the original scale
         bounds = self._get_bounds(initial_guess, J_creep, use_log=False)
 
         # Residuals function in the original parameter space
         def residuals_original_scale(params):
-            log_params = [np.log10(param) if name not in ['alpha', 'beta'] else param for param, name in zip(params, MODEL_PARAMS[self.model])]
+            log_params = [np.log10(param) if name not in ['alpha', 'beta', 'kappa'] else param for param, name in zip(params, MODEL_PARAMS[self.model])]
             return residuals(log_params)
 
         # Use minimize with the initial guesses from gp_minimize
@@ -275,14 +289,17 @@ class CreepModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha = np.random.uniform(0.001, 0.98)
+                alpha = np.random.uniform(0.0000001, 0.99)
                 initial_guess.append(alpha)
             elif name == 'beta':
                 if alpha is not None:
-                    beta = np.random.uniform(0.001, alpha)
+                    beta = np.random.uniform(0.0000001, alpha)
                 else:
-                    beta = np.random.uniform(0.001, 0.98)
+                    beta = np.random.uniform(0.0000001, 0.99)
                 initial_guess.append(beta)
+            elif name == 'kappa':
+                kappa = np.random.uniform(0, 1)
+                initial_guess.append(kappa)
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
                 initial_guess.append(np.random.uniform(np.log10(range_min) if use_log else range_min, np.log10(range_max) if use_log else range_max))
@@ -298,14 +315,16 @@ class CreepModel(BaseModel):
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
-                alpha_bound = (0.001, 0.98)
+                alpha_bound = (0.0000001, 0.99)
                 bounds.append(alpha_bound)
             elif name == 'beta':
                 if alpha_bound is not None:
-                    beta_bound = (0.001, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
+                    beta_bound = (0.0000001, initial_guess[MODEL_PARAMS[self.model].index('alpha')])
                 else:
-                    beta_bound = (0.001, 0.98)
+                    beta_bound = (0.0000001, 0.99)
                 bounds.append(beta_bound)
+            elif name == 'kappa':
+                bounds.append((0, 1))
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
                 bounds.append((np.log10(range_min) if use_log else range_min, np.log10(range_max) if use_log else range_max))
@@ -313,19 +332,21 @@ class CreepModel(BaseModel):
         return bounds
 
     def _get_param_bounds(self, J_creep):
-        range_min = np.min(1/J_creep) / 10
-        range_max = np.max(1/J_creep) * 10
+        range_min = np.min(1/J_creep) / 100
+        range_max = np.max(1/J_creep) * 100
         return (range_min, range_max)
 
     def _get_search_space(self, J_creep):
         search_space = []
-        alpha_bound = Real(0.0001, 0.98)
+        alpha_bound = Real(0.0001, 0.99)
 
         for name in MODEL_PARAMS[self.model]:
             if name == 'alpha':
                 search_space.append(alpha_bound)
             elif name == 'beta':
-                search_space.append(Real(0.0001, 0.98))  # Initial dummy bound for search space
+                search_space.append(Real(0.0001, 0.99))  # Initial dummy bound for search space
+            elif name == 'kappa':
+                search_space.append(Real(0, 1))
             else:
                 range_min, range_max = self._get_param_bounds(J_creep)
                 search_space.append(Real(np.log10(range_min), np.log10(range_max)))  # Log10 search space
@@ -374,8 +395,8 @@ class CreepModel(BaseModel):
             raise ValueError("Model must be fitted before plotting.")
     
         import matplotlib.pyplot as plt
-        #import scienceplots
-        #plt.style.use(['science', 'nature', "bright"])
+        # import scienceplots
+        # plt.style.use(['science', 'nature', "bright"])
 
         # Predict J_creep using the fitted model
         J_creep_pred = self.predict(time)
@@ -388,8 +409,6 @@ class CreepModel(BaseModel):
         plt.yscale("log")
         plt.xticks(fontsize=16)
         plt.yticks(fontsize=16)
-        #plt.xticks([], [])
-        #plt.yticks([], [])
         plt.xlabel(r'$t$ [s]', fontsize=16)
         plt.ylabel(r'$J(t)$ [Pa$^{-1}$]', fontsize=16)
         plt.legend(fontsize=13, loc='upper left')
@@ -400,3 +419,5 @@ class CreepModel(BaseModel):
             plt.savefig(filename, dpi=dpi, format=file_format, bbox_inches='tight')
 
         plt.show()
+
+
