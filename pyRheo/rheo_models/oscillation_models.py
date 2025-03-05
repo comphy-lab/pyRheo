@@ -611,6 +611,65 @@ def FractionalZenerS(G_p, G, V, alpha, beta, omega, errorInserted=0):
         G_prime *= createRandomError(omega.shape[0], errorInserted)
         G_double_prime *= createRandomError(omega.shape[0], errorInserted)
     
+    return np.concatenate([G_prime, G_double_prime])
+    
+# Fractional Zener model (springpot-springpot--- spring)     
+def FractionalZener(G, V, K, alpha, beta, kappa, omega, errorInserted=0):
+    """
+    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener Liquid-D model.
+    
+    Parameters
+    ----------
+    G: float.
+        Quasi-modulus (Pa*s^beta)
+    V: float.
+        Quasi-modulus (Pa*s^alpha)
+    K: float.
+        Quasi-modulus (Pa*s^kappa)
+    alpha: float 
+        Parameter between [0, 1] (dimensionless).
+    beta: float 
+        Parameter between [0, 1] (dimensionless).
+    kappa: float 
+        Parameter between [0, 1] (dimensionless).
+    omega : numpy
+        Array of angular frequency values (rad/s).
+    errorInserted : float, optional
+        Optional error to insert into the model (default is 0).
+
+    Returns  
+    -------
+    G_prime : numpy.ndarray
+        Storage modulus at each omega point.
+    G_double_prime : numpy.ndarray
+        Loss modulus at each omega point.
+    """
+    G_omega_beta = np.multiply(G, np.power(omega, beta))
+    V_omega_alpha = np.multiply(V, np.power(omega, alpha))
+    K_omega_kappa = np.multiply(K, np.power(omega, kappa))
+    cos_pi_alpha = np.cos(np.pi * alpha / 2)
+    sin_pi_alpha = np.sin(np.pi * alpha / 2)
+    cos_pi_beta = np.cos(np.pi * beta / 2)
+    sin_pi_beta = np.sin(np.pi * beta / 2)
+    cos_pi_kappa = np.cos(np.pi * kappa / 2)
+    sin_pi_kappa = np.sin(np.pi * kappa / 2)
+    cos_pi_alpha_beta = np.cos(np.pi * (alpha - beta) / 2)
+    
+    # Numerators for G' and G''
+    G_prime_numerator = (G_omega_beta**2 * V_omega_alpha * cos_pi_alpha) + (V_omega_alpha**2 * G_omega_beta * cos_pi_beta)
+    G_double_prime_numerator = (G_omega_beta**2 * V_omega_alpha * sin_pi_alpha) + (V_omega_alpha**2 * G_omega_beta * sin_pi_beta)
+    
+    # Denominator for both G' and G''
+    denominator = V_omega_alpha**2 + G_omega_beta**2 + (2 * V_omega_alpha * G_omega_beta * cos_pi_alpha_beta)
+    
+    # Storage modulus G' and Loss modulus G''
+    G_prime = np.multiply(K_omega_kappa, cos_pi_kappa) + (G_prime_numerator / denominator)
+    G_double_prime = np.multiply(K_omega_kappa, sin_pi_kappa) + (G_double_prime_numerator / denominator)
+
+    if errorInserted != 0:
+        G_prime *= createRandomError(omega.shape[0], errorInserted)
+        G_double_prime *= createRandomError(omega.shape[0], errorInserted)
+    
     return np.concatenate([G_prime, G_double_prime]) 
 
 

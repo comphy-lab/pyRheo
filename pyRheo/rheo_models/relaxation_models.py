@@ -587,3 +587,58 @@ def FractionalZenerS(G_p, G, V, alpha, beta, t, errorInserted=0, mittag_leffler_
         
     return result
 
+# Fractional Zener model (springpot-springpot--- spring)     
+def FractionalZener(G, V, K, alpha, beta, kappa, t, errorInserted=0, mittag_leffler_type="Pade72"):
+    """
+    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener Liquid-D model.
+    
+    Parameters
+    ----------
+    G: float.
+        Quasi-modulus (Pa*s^beta)
+    V: float.
+        Quasi-modulus (Pa*s^alpha)
+    K: float.
+        Quasi-modulus (Pa*s^kappa)
+    alpha: float 
+        Parameter between [0, 1] (dimensionless).
+    beta: float 
+        Parameter between [0, 1] (dimensionless).
+    kappa: float 
+        Parameter between [0, 1] (dimensionless).
+    omega : numpy
+        Array of angular frequency values (rad/s).
+    errorInserted : float, optional
+        Optional error to insert into the model (default is 0).
+
+    Returns
+    -------
+    ndarray
+        The relaxation modulus response at each time point in `t`.
+    """
+    tau_c = (V / G)**(1 / (alpha - beta))
+    G_c = V * (tau_c**(-alpha))
+    z = -np.power(np.divide(t, tau_c), alpha - beta)
+    a = alpha - beta
+    b = 1 - beta
+    
+    if mittag_leffler_type == "Pade32":
+        response_func = R_alpha_beta_3_2
+    elif mittag_leffler_type == "Pade54":
+        response_func = R_alpha_beta_5_4
+    elif mittag_leffler_type == "Pade63":
+        response_func = R_alpha_beta_6_3
+    elif mittag_leffler_type == "Pade72":
+        response_func = R_alpha_beta_7_2
+    elif mittag_leffler_type == "Garrappa":
+        response_func = E_alpha_beta
+    else:
+        raise ValueError("mittag_leffler_type must be either 'Pade' or 'Garrappa'")
+
+    result = np.multiply(((K) / (gamma(1 - kappa))), np.power(t, -kappa)) + G * np.multiply(np.power(t, -beta), response_func(z, a, b))
+
+    if errorInserted != 0:
+        error = createRandomError(t.shape[0], errorInserted)
+        result = np.multiply(result,error)
+        
+    return result

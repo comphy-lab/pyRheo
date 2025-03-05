@@ -600,4 +600,63 @@ def FractionalZenerS(G_p, G, V, alpha, beta, t, errorInserted=0):
         error = createRandomError(t.shape[0], errorInserted)
         result = np.multiply(result, error)
         
+    return result
+    
+# Fractional Zener model (springpot-springpot--- springpot)     
+def FractionalZener(G, V, K, alpha, beta, kappa, t, errorInserted=0):
+    """
+    Compute the Fractional ZenerS.
+    
+    Parameters
+    ----------
+
+    G: float.
+        Quasi-modulus (Pa*s^beta)
+    V: float.
+        Quasi-modulus (Pa*s^alpha)
+    K: float.
+        Quasi-modulus (Pa*s^kappa)
+    alpha: float 
+        Parameter between [0, 1] (dimensionless).
+    beta: float 
+        Parameter between [0, 1] (dimensionless).
+    kappa: float 
+        Parameter between [0, 1] (dimensionless).
+    omega : numpy
+        Array of angular frequency values (rad/s).
+    errorInserted : float, optional
+        Optional error to insert into the model (default is 0).
+
+    Returns
+    -------
+    ndarray
+        The creep compliance response at each time point in `t`.
+    """
+    def J_hat(s, G, V, K, alpha, beta, kappa):
+        # Calculate terms for the numerator of the Laplace transform
+        term1 = np.divide(1, s)
+        numerator = np.add(np.multiply(V,np.power(s, alpha)), np.multiply(G,np.power(s, beta)))
+        
+        # Calculate the denominator of the Laplace transform
+        denominator1 = np.multiply(np.multiply(V,np.power(s, alpha)), np.multiply(G,np.power(s, beta)))
+        denominator2 = np.multiply(np.multiply(K,np.power(s, kappa)), numerator)
+        denominator = np.add(denominator1, denominator2)
+        
+        # Compute the Laplace transform J_hat(s)
+        return np.multiply(term1, np.divide(numerator, denominator))
+    
+    def inverse_laplace_transform(J_hat, t):
+        # Use mpmath's invertlaplace function for the inverse Laplace transform
+        return mpmath.invertlaplace(lambda p: J_hat(p, G, V, K, alpha, beta, kappa), t, method='talbot')
+    
+    # Calculate J(t) values
+    result = [inverse_laplace_transform(J_hat, ti) for ti in t]
+
+    # Convert the results to a numpy array for convenience
+    result = np.array(result, dtype=float)
+    
+    if errorInserted != 0:
+        error = createRandomError(t.shape[0], errorInserted)
+        result = np.multiply(result, error)
+        
     return result 
