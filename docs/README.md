@@ -35,16 +35,16 @@ Check out the Quick Start section for more information on getting started, inclu
 pyRheo is a Python package for automatically finding and fitting a viscoelastic model to describe data from creep, stress relaxation, small amplitude oscillatory shear, and steady shear flow.
 
 ## Citing
-This package is based on the methodology described in **pyRheo: An open-source Python package for complex rheology**. If you use the software and feel that it was useful for your research, plase cite this manuscript.
+This package is based on the methodology described in **pyRheo: An open-source Python package for complex rheology**. If you use the software and feel that it was useful for your research, please cite this manuscript.
 
 ```
-@article{miranda-valdez_niinisto_makinen_koivisto_alava_2024,
-    doi = {},
-    url = {},
+@article{miranda-valdez_niinisto_makinen_lejon_koivisto_alava_2024,
+    doi = {https://doi.org/10.1039/D5DD00021A},
+    url = {https://pubs.rsc.org/en/Content/ArticleLanding/2025/DD/D5DD00021A},
     author = {Miranda-Valdez, Isaac Y. and Niinistö, Aaro and Mäkinen, Tero and Lejon, Juha and Koivisto, Juha and Alava, Mikko J.},
     title = {pyRheo: An open-source Python package for complex rheology},
-    publisher = {arXiv},
-    year = {2024},
+    publisher = {Digital Discovery},
+    year = {2025},
 }
 ```
 
