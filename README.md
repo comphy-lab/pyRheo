@@ -2,7 +2,7 @@
 
 **pyRheo** is a Python package for rheological modeling, providing tools for creep, stress relaxation, small amplitude oscillatory shear, and steady shear flow models. This package is designed to help researchers and engineers analyze and model the behavior of viscoelastic materials.
 
-Publication of this work is coming soon. Please cite this preprint https://doi.org/10.48550/arXiv.2412.15941
+Cite the peer-reviewed publication of pyRheo if you feel the package contributed to your research. Miranda-Valdez et al. Digital Discovery, 2025, DOI [https://doi.org/10.1039/D5DD00021A](https://doi.org/10.1039/D5DD00021A)
 
 ## Table of Contents
 - [Documentation](#documentation)
