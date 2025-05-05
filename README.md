@@ -4,6 +4,8 @@
 
 Cite the peer-reviewed publication of pyRheo if you feel the package contributed to your research. Miranda-Valdez et al. Digital Discovery, 2025, DOI [https://doi.org/10.1039/D5DD00021A](https://doi.org/10.1039/D5DD00021A)
 
+**Version 1.0.2 is coming in May 2025. You can now choose what cost function to minimize. This will include Bayesian Information Criterion,**
+
 ## Table of Contents
 - [Documentation](#documentation)
 - [Installation](#installation)
