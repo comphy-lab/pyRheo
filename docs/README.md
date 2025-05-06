@@ -141,7 +141,8 @@ For example, the parameters are stored as:
 {'G': 25856.763541580505,
  'eta_s': 68281.08243229917,
  'beta': 0.4223496565227164,
- 'RSS': 0.04791247579367503}
+ 'Cost': 0.04791247579367503,
+ 'Cost Metric': 'BIC'}
 ```
 
 ## Plotting results
