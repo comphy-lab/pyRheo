@@ -4,7 +4,16 @@
 
 Cite the peer-reviewed publication of pyRheo if you feel the package contributed to your research. Miranda-Valdez et al. Digital Discovery, 2025, DOI [https://doi.org/10.1039/D5DD00021A](https://doi.org/10.1039/D5DD00021A)
 
-**Version 1.0.2 is coming in May 2025. You will now be able to choose a cost function to minimize. This will include Bayesian Information Criterion (BIC)**
+**Version 1.0.2: Choose the cost function to minimize. For example:**
+```python
+model = RelaxationModel(model="FractionalZenerSolidS",
+                        cost_function="BIC" # Other options are RSS, MAE, and MSE
+                        initial_guesses="random", 
+                        num_initial_guesses=10, 
+                        minimization_algorithm="Powell", 
+                        mittag_leffler_type="Pade32"
+                       )
+```
 
 ## Table of Contents
 - [Documentation](#documentation)
