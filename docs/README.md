@@ -106,6 +106,7 @@ For fitting the data, let's first create a model object
 ```python
 model_creep = CreepModel(model="FractionalMaxwellLiquid",  # Choose a model, if "auto", it will use a Machine Learning classifier to decide
                         initial_guesses="random",         # The fitting starts with random initial guesses for the parameters
+                        cost_function="BIC",               # BIC, RSS, MAE, or MSE
                         bounds = "auto",                  # The auto method considers the lowest and highest values in the dataset and adds a margin. If manual, use e.g., bounds = [(1e0, 1e6), (1e0, 1e6), (0.01, 0.99)]
                         num_initial_guesses=10,           # The fitting restarts 10 times with different initial guesses for the parameters
                         minimization_algorithm="Powell",  # Optimization algorithm for global optimization
@@ -265,6 +266,7 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
 | `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
 | `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`. Options include `"Pade32"`, `"Pade54"`, `"Pade63"`, `"Pade72"`, `"Garrappa"`             |
+| `cost_function`  | `str`  | Error function to minimize. Default is `"RSS"`. Options include `"RSS"`, `"MAE"`, `"MSE"`, `"BIC"`             |
 
 ## Stress relaxation
 
@@ -286,6 +288,7 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
 | `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
 | `mittag_leffler_type`  | `str`  | Type of Mittag-Leffler function to use. Default is `"Pade32"`. Options include `"Pade32"`, `"Pade54"`, `"Pade63"`, `"Pade72"`, `"Garrappa"`             |
+| `cost_function`  | `str`  | Error function to minimize. Default is `"RSS"`. Options include `"RSS"`, `"MAE"`, `"MSE"`, `"BIC"`             |
 
 ## Oscillation
 
@@ -306,6 +309,8 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
 | `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+| `cost_function`  | `str`  | Error function to minimize. Default is `"RSS"`. Options include `"RSS"`, `"MAE"`, `"MSE"`, `"BIC"`             |
+
 
 ## Rotation
 
@@ -326,6 +331,8 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
 | `num_initial_guesses`  | `int`  | Number of initial guesses for random/bayesian methods. Default is `64`.    |
+| `cost_function`  | `str`  | Error function to minimize. Default is `"RSS"`. Options include `"RSS"`, `"MAE"`, `"MSE"`, `"BIC"`             |
+
 
 
 
