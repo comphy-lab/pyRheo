@@ -255,12 +255,11 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ---
 
-### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+### Constructor: `__init__(self, model="Maxwell", cost_function="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
 | `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
-| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
@@ -277,12 +276,11 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ---
 
-### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+### Constructor: `__init__(self, model="Maxwell", cost_function="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
 | `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
-| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
@@ -299,12 +297,11 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ---
 
-### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+### Constructor: `__init__(self, model="Maxwell", cost_function="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
 | `model`                | `str`  | The rheological model to use. Default is `"Maxwell"`. Options include `"Maxwell"`, `"SpringPot"`, `"FractionalMaxwellGel"`, `"FractionalMaxwellLiquid"`, `"FractionalMaxwell"`, `"FractionalKelvinVoigtS"`, `"FractionalKelvinVoigtD"`, `"FractionalKelvinVoigt"`, `"Zener"`, `"FractionalZenerSolidS"`, `"FractionalZenerLiquidS"`, `"FractionalZenerLiquidD"`, `"FractionalZenerS"`, `"FractionalZener"`, `"auto"` for automatic model selection. |
-| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
@@ -321,12 +318,11 @@ To deal with different dataset sizes, we use principal component analysis (PCA) 
 
 ---
 
-### Constructor: `__init__(self, model="Maxwell", method="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
+### Constructor: `__init__(self, model="Maxwell", cost_function="RSS", initial_guesses="random", bounds="auto", minimization_algorithm="Powell", num_initial_guesses=64, mittag_leffler_type="Pade32")`
 
 | Parameter              | Type   | Description                    |
 |------------------------|--------|--------------------------------|
 | `model`                | `str`  | The rheological model to use. Default is `"HerschelBulkley"`. Options include `"HerschelBulkley"`, `"Bingham"`, `"PowerLaw"`, `"CarreauYasuda"`, `"Cross"`, `"Casson"`. |
-| `method`               | `str`  | Method for fitting the model. Default is `"RSS"`. Currently, it is the only method available.                            |
 | `initial_guesses`      | `str`  | Method for generating initial guesses. Default is `"random"`. Other options are `"bayesian"` and `"manual"`. |
 | `bounds`               | `str`  | Bounds for the parameters. Default is `"auto"`.                             |
 | `minimization_algorithm` | `str`  | Algorithm for minimization. Default is `"Powell"`. Options include the algorithms available in SciPy.optimize `minimize`                        |
