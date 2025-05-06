@@ -4,6 +4,10 @@
 
 Cite the peer-reviewed publication of pyRheo if you feel the package contributed to your research. Miranda-Valdez et al. Digital Discovery, 2025, DOI [https://doi.org/10.1039/D5DD00021A](https://doi.org/10.1039/D5DD00021A)
 
+**Version 1.0.0: First release of pyRheo**
+
+**Version 1.0.1: OscillationModel and RotationModel classes were changed to SAOSModel and SteadyShearModel. Prompts will show up if a fractional order is close to 0 or 1.**
+
 **Version 1.0.2: Choose the cost function to minimize. For example:**
 ```python
 model = RelaxationModel(model="FractionalZenerSolidS",
