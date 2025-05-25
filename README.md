@@ -4,7 +4,9 @@
 
 Cite the peer-reviewed publication of pyRheo if you feel the package contributed to your research. Miranda-Valdez et al. Digital Discovery, 2025, DOI [https://doi.org/10.1039/D5DD00021A](https://doi.org/10.1039/D5DD00021A)
 
-Feel free to share any suggestions and feedback!
+Feel free to share any suggestions and feedback. 
+
+Ask pyRheo's DeepWiki [https://deepwiki.com/mirandi1/pyRheo](https://deepwiki.com/mirandi1/pyRheo)
 
 **Version 1.0.0: First release of pyRheo**
 
