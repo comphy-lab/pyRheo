@@ -562,7 +562,7 @@ def FractionalZenerLiquidD(eta_p, G, eta_s, beta, omega, errorInserted=0):
 # Fractional Zener model (springpot-springpot--- spring)     
 def FractionalZenerS(G_p, G, V, alpha, beta, omega, errorInserted=0):
     """
-    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener Liquid-D model.
+    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener S model.
     
     Parameters
     ----------
@@ -616,7 +616,7 @@ def FractionalZenerS(G_p, G, V, alpha, beta, omega, errorInserted=0):
 # Fractional Zener model (springpot-springpot--- spring)     
 def FractionalZener(G, V, K, alpha, beta, kappa, omega, errorInserted=0):
     """
-    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener Liquid-D model.
+    Compute the storage modulus (G') and loss modulus (G'') for the Fractional Zener model.
     
     Parameters
     ----------
