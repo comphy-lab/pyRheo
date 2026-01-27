@@ -154,7 +154,7 @@ class SAOSModel(BaseModel):
             if func_name == "RSS_custom":
                 return np.sum((residual / weights) ** 2)
             elif func_name == "BIC_custom":
-                    rss = np.sum((residual / weights) ** 2)
+                rss = np.sum((residual / weights) ** 2)
                 return rss + num_params * np.log(len(y_true))
             else:
                 raise ValueError(f"Unknown cost function tuple: {self.cost_function}")
@@ -398,7 +398,13 @@ class SAOSModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         
-        print(f"Cost ({self.cost_function}): {self.cost_}")
+        # Clean display for cost function
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
+        print(f"Cost ({cost_name}): {self.cost_}")
 
     def get_parameters(self):
         if not self.fitted_:
@@ -407,7 +413,12 @@ class SAOSModel(BaseModel):
         param_names = MODEL_PARAMS[self.model]
         parameters = {name: param for name, param in zip(param_names, self.params_)}
         parameters["Cost"] = self.cost_
-        parameters["Cost Metric"] = self.cost_function
+
+        # Clean display for cost function
+        if isinstance(self.cost_function, tuple):
+            parameters["Cost Metric"] = self.cost_function[0] + " (custom weights)"
+        else:
+            parameters["Cost Metric"] = self.cost_function
 
         return parameters
 
@@ -419,8 +430,15 @@ class SAOSModel(BaseModel):
         percentage_error = (absolute_error / self.y_true) * 100
         mean_percentage_error = np.mean(percentage_error)
 
+        # Clean display for cost function
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
         print(f"Mean Percentage Error: {mean_percentage_error:.2f}%")
-        print(f"Cost ({self.cost_function}): {self.cost_}")
+        print(f"Cost ({cost_name}): {self.cost_}")
+
 
     def plot(self, omega, G_prime, G_double_prime, dpi=1200, savefig=False, filename="plot.png", file_format="png"):
         if not self.fitted_:

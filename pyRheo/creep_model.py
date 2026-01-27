@@ -123,25 +123,65 @@ class CreepModel(BaseModel):
         return predicted_model
         
     def _calculate_cost(self, y_true, y_pred):
-        # Access the number of parameters in the model dynamically
+        """
+        Calculate the cost based on the selected cost function.
+
+        Supports:
+            - 'RSS': weighted RSS using y_true as weights (default / legacy)
+            - 'RSS_unweighted': standard RSS
+            - ('RSS_custom', weights): RSS with user-provided weights
+            - 'MSE', 'MAE'
+            - 'BIC': weighted BIC using y_true as weights (default / legacy)
+            - 'BIC_unweighted': unweighted BIC
+            - ('BIC_custom', weights): BIC with user-provided weights
+        """
         num_params = self.num_parameters
-        
-        if self.cost_function == "RSS":
-            residual = y_true - y_pred
+        residual = y_true - y_pred
+
+        # --- Custom-weighted RSS / BIC ---
+        if isinstance(self.cost_function, tuple):
+            func_name, weights = self.cost_function
+            weights = np.asarray(weights)
+
+            if weights.shape != y_true.shape:
+                raise ValueError("Custom weights must match the shape of y_true.")
+
+            if func_name == "RSS_custom":
+                return np.sum((residual / weights) ** 2)
+
+            elif func_name == "BIC_custom":
+                rss = np.sum((residual / weights) ** 2)
+                return rss + num_params * np.log(len(y_true))
+
+            else:
+                raise ValueError(f"Unknown cost function tuple: {self.cost_function}")
+
+        # --- Predefined cost functions ---
+        if self.cost_function == "RSS":  # weighted (legacy behavior)
             weights = y_true
-            return np.sum((residual / weights)**2)
+            return np.sum((residual / weights) ** 2)
+
+        elif self.cost_function == "RSS_unweighted":
+            return np.sum(residual ** 2)
+
         elif self.cost_function == "MSE":
-            return np.mean((y_true - y_pred) ** 2)
+            return np.mean(residual ** 2)
+
         elif self.cost_function == "MAE":
-            return np.mean(np.abs(y_true - y_pred))
-        elif self.cost_function == "BIC":
-            residual = y_true - y_pred
+            return np.mean(np.abs(residual))
+
+        elif self.cost_function == "BIC":  # weighted (legacy behavior)
             weights = y_true
-            rss = np.sum((residual / weights)**2)
+            rss = np.sum((residual / weights) ** 2)
             return rss + num_params * np.log(len(y_true))
-        # Add other cost functions as needed
+
+        elif self.cost_function == "BIC_unweighted":
+            rss = np.sum(residual ** 2)
+            return rss + num_params * np.log(len(y_true))
+
         else:
             raise ValueError(f"Cost function {self.cost_function} not recognized.")
+
 
 
     def fit(self, time, J_creep, initial_guesses=None):
@@ -392,8 +432,12 @@ class CreepModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         
-        # Print the cost value with an indication of the cost function used
-        print(f"Cost ({self.cost_function}): {self.cost_}")
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
+        print(f"Cost ({cost_name}): {self.cost_}")
 
     def get_parameters(self):
         if not self.fitted_:
@@ -401,8 +445,12 @@ class CreepModel(BaseModel):
 
         param_names = MODEL_PARAMS[self.model]
         parameters = {name: param for name, param in zip(param_names, self.params_)}
-        parameters["Cost"] = self.cost_  # Replace "RSS" with a generic "Cost"
-        parameters["Cost Metric"] = self.cost_function  # Include which cost metric was used
+        parameters["Cost"] = self.cost_
+
+        if isinstance(self.cost_function, tuple):
+            parameters["Cost Metric"] = self.cost_function[0] + " (custom weights)"
+        else:
+            parameters["Cost Metric"] = self.cost_function
 
         return parameters
 
@@ -414,8 +462,14 @@ class CreepModel(BaseModel):
         percentage_error = (absolute_error / self.y_true) * 100
         mean_percentage_error = np.mean(percentage_error)
 
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
         print(f"Mean Percentage Error: {mean_percentage_error:.2f}%")
-        print(f"Cost ({self.cost_function}): {self.cost_}")  # Report the cost metric used
+        print(f"Cost ({cost_name}): {self.cost_}")
+
 
     def plot(self, time, J_creep, savefig=False, dpi=1200, filename="plot.png", file_format="png"):
         if not self.fitted_:

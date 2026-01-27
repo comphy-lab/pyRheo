@@ -73,22 +73,52 @@ class SteadyShearModel(BaseModel):
         
     def _calculate_cost(self, y_true, y_pred):
         num_params = self.num_parameters
+        residual = y_true - y_pred
 
-        if self.cost_function == "RSS":
-            residual = y_true - y_pred
+        # Handle custom RSS/BIC weights
+        if isinstance(self.cost_function, tuple):
+            func_name, weights = self.cost_function
+            weights = np.asarray(weights)
+
+            if weights.shape != y_true.shape:
+                raise ValueError("Custom weights must match the shape of y_true/y_pred.")
+
+            if func_name == "RSS_custom":
+                return np.sum((residual / weights) ** 2)
+
+            elif func_name == "BIC_custom":
+                rss = np.sum((residual / weights) ** 2)
+                return rss + num_params * np.log(len(y_true))
+
+            else:
+                raise ValueError(f"Unknown cost function tuple: {self.cost_function}")
+
+        # Predefined cost functions
+        if self.cost_function == "RSS":  # weighted RSS (default behavior)
             weights = y_true
-            return np.sum((residual / weights)**2)
+            return np.sum((residual / weights) ** 2)
+
+        elif self.cost_function == "RSS_unweighted":
+            return np.sum(residual ** 2)
+
         elif self.cost_function == "MSE":
-            return np.mean((y_true - y_pred) ** 2)
+            return np.mean(residual ** 2)
+
         elif self.cost_function == "MAE":
-            return np.mean(np.abs(y_true - y_pred))
-        elif self.cost_function == "BIC":
-            residual = y_true - y_pred
+            return np.mean(np.abs(residual))
+
+        elif self.cost_function == "BIC":  # weighted BIC
             weights = y_true
-            rss = np.sum((residual / weights)**2)
+            rss = np.sum((residual / weights) ** 2)
             return rss + num_params * np.log(len(y_true))
+
+        elif self.cost_function == "BIC_unweighted":
+            rss = np.sum(residual ** 2)
+            return rss + num_params * np.log(len(y_true))
+
         else:
             raise ValueError(f"Cost function {self.cost_function} not recognized.")
+
 
 
     def _auto_select_model(self, eta, gamma_dot):
@@ -300,7 +330,12 @@ class SteadyShearModel(BaseModel):
         for name, param in zip(param_names, self.params_):
             print(f"{name}: {param}")
         
-        print(f"Cost ({self.cost_function}): {self.cost_}")
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
+        print(f"Cost ({cost_name}): {self.cost_}")
 
     def get_parameters(self):
         if not self.fitted_:
@@ -309,7 +344,11 @@ class SteadyShearModel(BaseModel):
         param_names = MODEL_PARAMS[self.model]
         parameters = {name: param for name, param in zip(param_names, self.params_)}
         parameters["Cost"] = self.cost_
-        parameters["Cost Metric"] = self.cost_function
+
+        if isinstance(self.cost_function, tuple):
+            parameters["Cost Metric"] = self.cost_function[0] + " (custom weights)"
+        else:
+            parameters["Cost Metric"] = self.cost_function
 
         return parameters
 
@@ -321,8 +360,14 @@ class SteadyShearModel(BaseModel):
         percentage_error = (absolute_error / self.y_true) * 100
         mean_percentage_error = np.mean(percentage_error)
 
+        if isinstance(self.cost_function, tuple):
+            cost_name = self.cost_function[0] + " (custom weights)"
+        else:
+            cost_name = self.cost_function
+
         print(f"Mean Percentage Error: {mean_percentage_error:.2f}%")
-        print(f"Cost ({self.cost_function}): {self.cost_}")
+        print(f"Cost ({cost_name}): {self.cost_}")
+
 
     def plot(self, gamma_dot, eta, savefig=False, filename="plot.png", dpi=300, file_format="png"):
         if not self.fitted_:
