@@ -129,24 +129,56 @@ class SAOSModel(BaseModel):
         return predicted_model
 
     def _calculate_cost(self, y_true, y_pred):
-        # Access the number of parameters in the model dynamically
-        num_params = self.num_parameters
+        """
+        Calculate the cost based on the selected cost function.
 
-        if self.cost_function == "RSS":
-            residual = y_true - y_pred
+        Supports:
+            - 'RSS': weighted RSS using y_true as weights (current behavior)
+            - 'RSS_unweighted': standard RSS without weights
+            - ('RSS_custom', weights_array): RSS with user-provided weights
+            - 'MSE', 'MAE'
+            - 'BIC': weighted BIC using y_true as weights
+            - 'BIC_unweighted': unweighted BIC
+            - ('BIC_custom', weights_array): BIC with user-provided weights
+        """
+        num_params = self.num_parameters
+        residual = y_true - y_pred
+
+        # Handle custom RSS/BIC weights
+        if isinstance(self.cost_function, tuple):
+            func_name, weights = self.cost_function
+            weights = np.asarray(weights)
+            if weights.shape != y_true.shape:
+                raise ValueError("Custom weights must match the shape of y_true/y_pred.")
+
+            if func_name == "RSS_custom":
+                return np.sum((residual / weights) ** 2)
+            elif func_name == "BIC_custom":
+                    rss = np.sum((residual / weights) ** 2)
+                return rss + num_params * np.log(len(y_true))
+            else:
+                raise ValueError(f"Unknown cost function tuple: {self.cost_function}")
+
+        # Handle predefined cost functions
+        if self.cost_function == "RSS":  # weighted RSS (current default)
             weights = y_true
-            return np.sum((residual / weights)**2)
+            return np.sum((residual / weights) ** 2)
+        elif self.cost_function == "RSS_unweighted":
+            return np.sum(residual ** 2)
         elif self.cost_function == "MSE":
-            return np.mean((y_true - y_pred) ** 2)
+            return np.mean(residual ** 2)
         elif self.cost_function == "MAE":
-            return np.mean(np.abs(y_true - y_pred))
-        elif self.cost_function == "BIC":
-            residual = y_true - y_pred
+            return np.mean(np.abs(residual))
+        elif self.cost_function == "BIC":  # weighted BIC (current default)
             weights = y_true
-            rss = np.sum((residual / weights)**2)
+            rss = np.sum((residual / weights) ** 2)
+            return rss + num_params * np.log(len(y_true))
+        elif self.cost_function == "BIC_unweighted":
+            rss = np.sum(residual ** 2)
             return rss + num_params * np.log(len(y_true))
         else:
             raise ValueError(f"Cost function {self.cost_function} not recognized.")
+
 
     def fit(self, omega, G_prime, G_double_prime, initial_guesses=None):
         if self.model == "auto":
