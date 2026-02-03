@@ -9,9 +9,9 @@ Feel free to share any suggestions and feedback.
 Ask pyRheo's DeepWiki [https://deepwiki.com/mirandi1/pyRheo](https://deepwiki.com/mirandi1/pyRheo)
 
 **Version 1.0.0: First release of pyRheo**
-
+---
 **Version 1.0.1: OscillationModel and RotationModel classes were changed to SAOSModel and SteadyShearModel. Prompts will show up if a fractional order is close to 0 or 1**
-
+---
 **Version 1.0.2: Choose the cost function to minimize. For example:**
 ```python
 model = RelaxationModel(model="FractionalZenerSolidS",
@@ -22,6 +22,8 @@ model = RelaxationModel(model="FractionalZenerSolidS",
                         mittag_leffler_type="Pade32"
                        )
 ```
+---
+
 **Version 1.0.3: Custom weights in cost functions**
 
 pyRheo now supports **user-defined weights** in the cost function.  
@@ -53,7 +55,6 @@ cost_function = ("BIC_custom", weights)
 
 The `weights` array **must have the same shape and order** as the target material function being fitted.
 
----
 
 Example: Stress relaxation or creep
 
@@ -76,7 +77,6 @@ Here:
 - `G_std.shape == G_exp.shape`
 - The order of `G_std` must match the time order of the data
 
----
 
 Example: SAOS (oscillatory experiments)
 
@@ -125,7 +125,7 @@ These do **not** require user-provided weights:
 - `"MAE"`  
   Mean Absolute Error
 
-
+---
 ## Table of Contents
 - [Documentation](#documentation)
 - [Installation](#installation)
