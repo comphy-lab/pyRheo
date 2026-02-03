@@ -77,6 +77,11 @@ Here:
 - `G_std.shape == G_exp.shape`
 - The order of `G_std` must match the time order of the data
 
+A complete working example is provided in:
+
+```
+demos/demo_relaxation_cnf_fitting_with_weights.ipynb
+```
 
 Example: SAOS (oscillatory experiments)
 
