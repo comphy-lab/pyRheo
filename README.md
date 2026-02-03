@@ -22,6 +22,109 @@ model = RelaxationModel(model="FractionalZenerSolidS",
                         mittag_leffler_type="Pade32"
                        )
 ```
+**Version 1.0.3: Custom weights in cost functions**
+
+pyRheo now supports **user-defined weights** in the cost function.  
+This allows fitting data using, for example, **experimental standard deviations**.
+
+Weights are provided by passing a **tuple** to `cost_function`:
+
+```python
+cost_function = ("<COST>_custom", weights)
+```
+
+These require the user to provide a `weights` array:
+
+- `("RSS_custom", weights)`  
+  Weighted Residual Sum of Squares
+
+- `("BIC_custom", weights)`  
+  Bayesian Information Criterion computed from weighted RSS
+
+How to use custom weights
+
+Custom weights are passed as a **tuple** to `cost_function`:
+
+```python
+cost_function = ("RSS_custom", weights)
+# or
+cost_function = ("BIC_custom", weights)
+```
+
+The `weights` array **must have the same shape and order** as the target material function being fitted.
+
+---
+
+Example: Stress relaxation or creep
+
+In stress relaxation and creep experiments, there is **only one material function**  
+(e.g. relaxation modulus or compliance).
+
+If the experimental standard deviation is available, it can be used as weights:
+
+```python
+model = RelaxationModel(
+    model="FractionalKelvinVoigt",
+    initial_guesses="random",
+    minimization_algorithm="L-BFGS-B",
+    cost_function=("RSS_custom", G_std)
+)
+```
+
+Here:
+- `G_std` must be a **1D array**
+- `G_std.shape == G_exp.shape`
+- The order of `G_std` must match the time order of the data
+
+---
+
+Example: SAOS (oscillatory experiments)
+
+In SAOS experiments, **two material functions** are fitted simultaneously:
+- Storage modulus: `G'`
+- Loss modulus: `G''`
+
+The weights must therefore be provided as a **single concatenated array**:
+
+```python
+weights = np.concatenate([Gp_std, Gpp_std])
+
+model = SAOSModel(
+    model="auto",
+    initial_guesses="random",
+    minimization_algorithm="Powell",
+    cost_function=("BIC_custom", weights)
+)
+```
+
+Important:
+- `Gp_std` and `Gpp_std` must each match the shape of `G'` and `G''`
+- The concatenation order **must match the internal data order**
+- The final `weights` array must have the same shape as the stacked target vector
+
+---
+
+## Notes
+
+- Weights are typically the **experimental standard deviation**
+- Smaller weights give higher importance to data points
+- A mismatch in shape will raise a `ValueError`
+
+
+These do **not** require user-provided weights:
+
+- `"RSS"`  
+  Weighted RSS using the experimental data itself as weights (legacy behavior)
+
+- `"RSS_unweighted"`  
+  Standard (unweighted) RSS
+
+- `"MSE"`  
+  Mean Squared Error
+
+- `"MAE"`  
+  Mean Absolute Error
+
 
 ## Table of Contents
 - [Documentation](#documentation)
