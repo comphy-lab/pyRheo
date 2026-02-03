@@ -104,7 +104,7 @@ Important:
 
 ---
 
-## Notes
+Notes
 
 - Weights are typically the **experimental standard deviation**
 - Smaller weights give higher importance to data points
