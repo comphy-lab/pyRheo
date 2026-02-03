@@ -9,9 +9,9 @@ Feel free to share any suggestions and feedback.
 Ask pyRheo's DeepWiki [https://deepwiki.com/mirandi1/pyRheo](https://deepwiki.com/mirandi1/pyRheo)
 
 **Version 1.0.0: First release of pyRheo**
----
+
 **Version 1.0.1: OscillationModel and RotationModel classes were changed to SAOSModel and SteadyShearModel. Prompts will show up if a fractional order is close to 0 or 1**
----
+
 **Version 1.0.2: Choose the cost function to minimize. For example:**
 ```python
 model = RelaxationModel(model="FractionalZenerSolidS",
@@ -22,7 +22,7 @@ model = RelaxationModel(model="FractionalZenerSolidS",
                         mittag_leffler_type="Pade32"
                        )
 ```
----
+
 
 **Version 1.0.3: Custom weights in cost functions**
 
@@ -102,7 +102,6 @@ Important:
 - The concatenation order **must match the internal data order**
 - The final `weights` array must have the same shape as the stacked target vector
 
----
 
 Notes
 
